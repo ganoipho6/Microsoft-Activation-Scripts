@@ -135,25 +135,7 @@ ping 127.0.0.1 -n 20
 )
 cls
 
-::  Check LF line ending
-
-pushd "%~dp0"
->nul findstr /v "$" "%~nx0" && (
-echo:
-echo Error - Script either has LF line ending issue or an empty line at the end of the script is missing.
-echo:
-echo:
-echo Check this webpage for help - %mas%troubleshoot
-echo:
-echo:
-ping 127.0.0.1 -n 20 >nul
-popd
-:dk_cleanup_success
-if exist "%~dp0_Debug.log" del "%~dp0_Debug.log" >nul 2>&1
-if exist "%~dp0_tmp.log" del "%~dp0_tmp.log" >nul 2>&1
-exit /b
-)
-popd
+@REM Integrity check removed by HLCOM
 
 ::========================================================================================================================================
 

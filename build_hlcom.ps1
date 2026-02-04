@@ -99,6 +99,11 @@ $content = $content -replace 'title\s+Microsoft %blank%Activation %blank%Scripts
 # Disable Update Check loop
 $content = $content -replace '(?ms)(for %%A in\s+\(\s+activ%-%ated\.win)', '@REM Update check disabled by HLCOM`r`n@REM $1'
 
+Write-Host "Removing Integrity / LF Checks..."
+# Remove the "Check LF line ending" block (Principle 3)
+$lfCheckPattern = '(?ms)::\s*Check LF line ending\s+pushd "%~dp0".*?popd\s+exit /b\s+\)\s+popd'
+$content = $content -replace $lfCheckPattern, '@REM Integrity check removed by HLCOM'
+
 Write-Host "Localizing Menu..."
 $Translations = @{
     "Activation Methods:" = "PHUONG PHAP KICH HOAT (ACTIVATION METHODS):"
