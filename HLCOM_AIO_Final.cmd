@@ -53,38 +53,6 @@ if %EXIT_CODE% NEQ 0 (
 color 07
 cls
 
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-set "ps_cmd=powershell -NoProfile -NonInteractive -Command "$p = Read-Host -AsSecureString -Prompt 'NHAP MAT KHAU (Password)'; $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr); if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 }""
-%ps_cmd%
-if %errorlevel% neq 0 (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
-)
-color 07
-cls
-
-
-
 ::  For command line switches, check m{}assgrave{dot}dev/command_line_switches
 ::  If you want to better understand script, read from separate files version. 
 

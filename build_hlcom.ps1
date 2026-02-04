@@ -84,6 +84,12 @@ Write-Host "Injecting Header & Password Protection..."
 $content = $content -replace '(?m)^@::.*$', ''
 
 # Insert HLCOM Header after @echo off
+
+# First, generic cleanup of previous HLCOM injections if they exist in the source (to avoid duplication and bugs)
+# Matches from "::  HLCOM Banner" down to the "cls" that follows the password check.
+$content = $content -replace '(?s)::\s+HLCOM Banner.*?cls\s*', ''
+
+# Now inject the fresh, correct header
 $content = $content -replace '@echo off', "@echo off`r`n$HeaderInjection"
 
 Write-Host "Replacing Branding..."
