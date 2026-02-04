@@ -46,7 +46,7 @@ echo.
 set "_hlcom_pass="
 set /p "_hlcom_pass=NHAP MAT KHAU: "
 
-if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+if /i not "!_hlcom_pass!"=="toiyeuhailongcomputer" (
     color 0C
     echo.
     echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
