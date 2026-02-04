@@ -26,7 +26,7 @@ $HeaderInjection = @'
 $PasswordCheckInjection = @'
 ::========================================================================================================================================
 
-::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+::  HLCOM Password Protection
 color 0B
 cls
 echo.
@@ -44,15 +44,15 @@ echo ============================================================
 echo.
 
 set "_hlcom_pass="
-set /p "_hlcom_pass=NHAP MAT KHAU: "
+set /p "_hlcom_pass=NHAP MAT KHAU (Password): "
 
-if /i not "!_hlcom_pass!"=="toiyeuhailongcomputer" (
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
     color 0C
     echo.
     echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
     echo.
     pause
-    exit
+    exit /b
 )
 set "_hlcom_pass="
 color 07
@@ -73,22 +73,19 @@ exit /b
 # ---------------------------------------------------------
 
 Write-Host "Injecting Header & Password Protection..."
-# Remove original top comments (lines starting with @::) to clean up
+# Clean up any potential double echo off or previous injections
 $content = $content -replace '(?m)^@::.*$', ''
 
-# Insert HLCOM Header after @echo off (just comments, no password check)
-$content = $content -replace '@echo off', "@echo off`r`n$HeaderInjection"
+# Insert HLCOM Header after @echo off
+if ($content -contains "@echo off") {
+    $content = $content.Replace("@echo off", "@echo off`r`n$HeaderInjection")
+}
 
-# Insert Password Check BEFORE :MainMenu (after all relaunch logic)
-# Use .Replace() for literal string matching - try both CRLF and LF
+# Insert Password Check BEFORE :MainMenu (the one after all relaunch logic)
+# We use literal replace to ensure it hits the right spot
 if ($content.Contains(":MainMenu`r`n")) {
     $content = $content.Replace(":MainMenu`r`n", $PasswordCheckInjection)
-    Write-Host "  -> Replaced :MainMenu (CRLF)"
-} elseif ($content.Contains(":MainMenu`n")) {
-    $content = $content.Replace(":MainMenu`n", $PasswordCheckInjection)
-    Write-Host "  -> Replaced :MainMenu (LF)"
-} else {
-    Write-Host "  -> WARNING: :MainMenu not found!" -ForegroundColor Yellow
+    Write-Host "  -> Password protection injected before MainMenu" -ForegroundColor Green
 }
 
 Write-Host "Replacing Branding..."
@@ -105,27 +102,19 @@ $content = $content -replace 'title\s+Microsoft %blank%Activation %blank%Scripts
 $content = $content -replace '(?ms)(for %%A in\s+\(\s+activ%-%ated\.win)', '@REM Update check disabled by HLCOM`r`n@REM $1'
 
 Write-Host "Removing Integrity / LF Checks..."
-# Remove the "Check LF line ending" block (Principle 3)
 $lfCheckPattern = '(?ms)::\s*Check LF line ending\s+pushd "%~dp0".*?popd\s+exit /b\s+\)\s+popd'
 $content = $content -replace $lfCheckPattern, '@REM Integrity check removed by HLCOM'
 
 Write-Host "Localizing Menu..."
-
-# Fix the & character in batch file (causes CHUA error)
+# Fix the & character
 $content = $content.Replace('SU CO & CHUA LOI', 'SU CO VA CHUA LOI')
 
-# Main Menu Translations - dk_color3 calls (highlighted options)
+# Translations
 $content = $content.Replace('"HWID" %_White% "                - Windows"', '"1. KICH HOAT WINDOWS (VINH VIEN)" %_White% ""')
 $content = $content.Replace('"Ohook" %_White% "               - Office"', '"2. KICH HOAT OFFICE (VINH VIEN)" %_White% ""')
 $content = $content.Replace('"TSforge" %_White% "             - Windows / Office / ESU"', '"3. KICH HOAT WINDOWS/OFFICE/ESU (VINH VIEN)" %_White% ""')
+$content = $content.Replace('[4] Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)', '[4] 4. KICH HOat 180 NGAY (WINDOWS/OFFICE)')
 
-# Main Menu Translations - plain echo (non-highlighted options)
-$content = $content.Replace('[1] HWID                - KICH HOAT WINDOWS VINH VIEN', '[1] 1. KICH HOAT WINDOWS (VINH VIEN)')
-$content = $content.Replace('[2] Ohook               - KICH HOAT OFFICE VINH VIEN', '[2] 2. KICH HOAT OFFICE (VINH VIEN)')
-$content = $content.Replace('[3] TSforge             - KICH HOAT WINDOWS / OFFICE / ESU', '[3] 3. KICH HOAT WINDOWS/OFFICE/ESU (VINH VIEN)')
-$content = $content.Replace('[4] Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)', '[4] 4. KICH HOAT 180 NGAY (WINDOWS/OFFICE)')
-
-# Fallback - in case original text still exists
 $Translations = @{
     "Activation Methods:" = "PHUONG PHAP KICH HOAT (ACTIVATION METHODS):"
     "Check Activation Status" = "KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)"
@@ -140,33 +129,17 @@ foreach ($key in $Translations.Keys) {
     $content = $content.Replace($key, $Translations[$key])
 }
 
-# Handle Exit separately (too common)
 $content = $content -replace "\[0\] Exit", "[0] THOAT (EXIT)"
 
 Write-Host "Injecting Cleanup Logic..."
-# Find the end of the script main execution flow (usually before some big block of functions or at main exit)
-# In standard MAS, 'popd' followed by 'exit /b' near the top is a good spot for main exit.
-# We look for the first occurrence of cleaning up the temp check or similar.
-# Actually, replacing the main exit block manually is safer.
-
-# Pattern: popd [newline] exit /b
 $content = $content -replace '(?m)^popd\s*\r?\nexit /b', "popd`r`n$CleanupLogic"
 
 # ---------------------------------------------------------
 # 3. SAVE
 # ---------------------------------------------------------
-
 Write-Host "Saving to $OutputFile..." -ForegroundColor Green
-
-# CRITICAL: Ensure CRLF line endings for Windows Batch compatibility
 $content = $content.Replace("`r`n", "`n").Replace("`n", "`r`n")
-
-# Add empty line at EOF (required by original MAS script check)
-if (-not $content.EndsWith("`r`n")) {
-    $content += "`r`n"
-}
-
-# Save with ASCII encoding
+if (-not $content.EndsWith("`r`n")) { $content += "`r`n" }
 [System.IO.File]::WriteAllText($OutputFile, $content, [System.Text.Encoding]::ASCII)
 
 Write-Host "Build Complete!" -ForegroundColor Green
