@@ -39,9 +39,22 @@ echo ============================================================
 echo.
 
 :CheckPassword
-set "psCommand=powershell -Command "$p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR)""
-for /f "usebackq delims=" %%p in (`%psCommand%`) do set PASSWORD=%%p
-if NOT "%PASSWORD%"=="toiyeuhailongcomputer" (
+:: Create Temp PowerShell Script
+set "pass_script=%temp%\hlcom_pass_check.ps1"
+echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
+echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
+echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
+echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
+
+:: Run Script
+powershell -ExecutionPolicy Bypass -File "%pass_script%"
+set "EXIT_CODE=%errorlevel%"
+
+:: Cleanup Temp Script
+del "%pass_script%" >nul 2>&1
+
+:: Verify logic
+if %EXIT_CODE% NEQ 0 (
     color 0C
     echo.
     echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
@@ -52,6 +65,14 @@ if NOT "%PASSWORD%"=="toiyeuhailongcomputer" (
 color 07
 cls
 '@
+
+# ... (Previous Code) ...
+
+Write-Host "Saving to $OutputFile..." -ForegroundColor Green
+# FORCE CRLF and ASCII Encoding
+$content = $content.Replace("`r`n", "`n").Replace("`n", "`r`n")
+[System.IO.File]::WriteAllText($OutputFile, $content, [System.Text.Encoding]::ASCII)
+
 
 $CleanupLogic = @"
 :dk_cleanup_success
