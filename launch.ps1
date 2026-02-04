@@ -9,7 +9,20 @@ try {
     Invoke-WebRequest -Uri $RepoURL -OutFile $TempPath -UseBasicParsing
     
     if (Test-Path $TempPath) {
-        Write-Host "Tai xuong thanh cong! Dang khoi dong..." -ForegroundColor Green
+        Write-Host "Tai xuong thanh cong! Dang xu ly..." -ForegroundColor Green
+        
+        # CRITICAL: Convert LF to CRLF (GitHub raw serves LF endings)
+        $rawContent = [System.IO.File]::ReadAllText($TempPath)
+        $crlfContent = $rawContent.Replace("`r`n", "`n").Replace("`n", "`r`n")
+        
+        # Ensure empty line at EOF
+        if (-not $crlfContent.EndsWith("`r`n")) {
+            $crlfContent += "`r`n"
+        }
+        
+        [System.IO.File]::WriteAllText($TempPath, $crlfContent, [System.Text.Encoding]::ASCII)
+        
+        Write-Host "Dang khoi dong..." -ForegroundColor Green
         # Execute CMD script and wait for it to finish
         Start-Process cmd.exe -ArgumentList "/c `"$TempPath`"" -Wait
     } else {
