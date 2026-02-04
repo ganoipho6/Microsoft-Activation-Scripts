@@ -53,6 +53,36 @@ if %EXIT_CODE% NEQ 0 (
 color 07
 cls
 
+::  HLCOM Banner & Security Check
+color 0B
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+:CheckPassword
+set "ps_cmd=powershell -NoProfile -NonInteractive -Command "$p = Read-Host -AsSecureString -Prompt 'NHAP MAT KHAU (Password)'; $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr); if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 }""
+%ps_cmd%
+if %errorlevel% neq 0 (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+color 07
+cls
+
 
 
 ::  For command line switches, check m{}assgrave{dot}dev/command_line_switches
@@ -62,7 +92,7 @@ cls
 
 ::============================================================================
 ::
-::   Homepage: m{}assgrave{dot}dev
+::   Homepage: HLCOM - BY Ganoipho6
 ::
 ::============================================================================
 
@@ -135,7 +165,25 @@ ping 127.0.0.1 -n 20
 )
 cls
 
-@REM Integrity check removed by HLCOM
+::  Check LF line ending
+
+pushd "%~dp0"
+>nul findstr /v "$" "%~nx0" && (
+echo:
+echo Error - Script either has LF line ending issue or an empty line at the end of the script is missing.
+echo:
+echo:
+echo Check this webpage for help - %mas%troubleshoot
+echo:
+echo:
+ping 127.0.0.1 -n 20 >nul
+popd
+goto :dk_cleanup_success
+)
+popd
+:dk_cleanup_success
+if exist "%~dp0_Debug.log" del "%~dp0_Debug.log" >nul 2>&1
+if exist "%~dp0_tmp.log" del "%~dp0_tmp.log" >nul 2>&1
 
 ::========================================================================================================================================
 
@@ -381,17 +429,18 @@ set old=
 set pingp=
 set upver=%masver:.=%
 
-@REM Update check disabled by HLCOM`r`n@REM for %%A in (
-activ%-%ated.win
-mass%-%grave.dev
-) do if not defined pingp (
-for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
-if not "%%B"=="" (set old=1& set pingp=1)
-for /f "delims=[] tokens=2" %%C in ('ping -n 1 updatecheck%upver%.%%A') do (
-if not "%%C"=="" set old=
-)
-)
-)
+@REM Update check disabled by HLCOM
+@REM for %%A in (
+@REM localhost
+@REM localhost
+@REM ) do if not defined pingp (
+@REM for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
+@REM if not "%%B"=="" (set old=1& set pingp=1)
+@REM for /f "delims=[] tokens=2" %%C in ('ping -n 1 updatecheck%upver%.%%A') do (
+@REM if not "%%C"=="" set old=
+@REM )
+@REM )
+@REM )
 
 if defined old (
 echo ________________________________________________
@@ -488,21 +537,21 @@ echo:
 echo:                 PHUONG PHAP KICH HOAT (ACTIVATION METHODS):
 echo:
 if defined _hwidgo (
-call :dk_color3 %_White% "             [1] " %_Green% "HWID" %_White% "                - Windows"
+call :dk_color3 %_White% "             [1] " %_Green% "1. Kich hoat Windows Ban quyen So (Vinh vien)" %_White% ""
 ) else (
-echo:             [1] HWID                - KICH HOAT WINDOWS VINH VIEN
+echo:             [1] 1. Kich hoat Windows Ban quyen So (Vinh vien)
 )
 if defined _ohookgo (
-call :dk_color3 %_White% "             [2] " %_Green% "Ohook" %_White% "               - Office"
+call :dk_color3 %_White% "             [2] " %_Green% "2. Kich hoat Office (Vinh vien)" %_White% ""
 ) else (
-echo:             [2] Ohook               - KICH HOAT OFFICE VINH VIEN
+echo:             [2] 2. Kich hoat Office (Vinh vien)
 )
 if defined _tsforgego (
 call :dk_color3 %_White% "             [3] " %_Green% "TSforge" %_White% "             - Windows / Office / ESU"
 ) else (
 echo:             [3] TSforge             - KICH HOAT WINDOWS / OFFICE / ESU
 )
-echo:             [4] Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)
+echo:             [4] 4. Kich hoat 180 ngay (Windows/Office)
 echo:             __________________________________________________ 
 echo:
 echo:             [5] KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)
@@ -510,7 +559,7 @@ echo:             [6] THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)
 echo:             [7] THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)
 echo:             __________________________________________________      
 echo:
-echo:             [8] SU CO & CHUA LOI (TROUBLESHOOT)
+echo:             [8] SU CO ^& CHUA LOI (TROUBLESHOOT)
 echo:             [E] TIEN ICH KHAC (EXTRAS)
 echo:             [H] TRO GIUP (HELP)
 echo:             [0] THOAT (EXIT)
@@ -731,7 +780,7 @@ set _NoEditionChange=0
 
 cls
 color 07
-title  HWID Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -775,7 +824,7 @@ if not defined terminal (
 mode 110, 34
 if exist "%SysPath%\spp\store_test\" mode 134, 34
 )
-title  HWID Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -790,7 +839,7 @@ if not exist %SysPath%\%%# (
 echo [%SysPath%\%%#] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -1274,10 +1323,10 @@ set "nceline=echo: &echo ==== ERROR ==== &echo:"
 set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
 if %~z0 GEQ 200000 (
 set "_exitmsg=Go back"
-set "_fixmsg=Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix Licensing option."
+set "_fixmsg=Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix Licensing option."
 ) else (
 set "_exitmsg=Exit"
-set "_fixmsg=In MAS folder, run SU CO & CHUA LOI (TROUBLESHOOT) script and select Fix Licensing option."
+set "_fixmsg=In MAS folder, run SU CO ^& CHUA LOI (TROUBLESHOOT) script and select Fix Licensing option."
 )
 exit /b
 
@@ -1530,7 +1579,7 @@ if %spperror% NEQ 1056 if %spperror% NEQ 0 (
 echo sc start %_slser% [Error Code: %spperror%]
 if %spperror% EQU 1053 (
 call :dk_color %Blue% "Reboot your machine using the restart option and try again."
-call :dk_color %Blue% "If it still does not work, go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "If it still does not work, go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
 )
 )
 
@@ -1848,7 +1897,7 @@ if defined wmifailed (
 call :dk_color %Red% "Checking WMI                            [Not Working]"
 
 if not defined showfix (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix WMI option."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix WMI option."
 echo:
 )
 set error=1
@@ -1977,7 +2026,7 @@ if defined chkalp (
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 if not defined showfix (
 echo "%wpainfo%" | find /i "Error Found" %nul% && (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
 echo:
 set error=1
 set showfix=1
@@ -1990,7 +2039,7 @@ if not defined chkalp (
 if %wpainfo% GEQ 5000 (
 call :dk_color %Gray% "Checking WPA Registry Count             [%wpainfo%]"
 call :dk_color %Blue% "A large number of WPA registries have been found, which may cause high CPU usage."
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
 echo:
 ) else (
 echo Checking WPA Registry Count             [%wpainfo%]
@@ -2542,7 +2591,7 @@ set _rem=0
 
 cls
 color 07
-title  Ohook Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -2569,7 +2618,7 @@ if %_rem%==1 goto :oh_uninstall
 if %_unattended%==0 (
 cls
 if not defined terminal mode 76, 25
-title  Ohook Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 call :oh_checkapps
 echo:
 echo:
@@ -2607,7 +2656,7 @@ if not defined terminal (
 mode 140, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  Ohook Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -2618,7 +2667,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -4427,7 +4476,7 @@ set "_debug=0"
 cls
 color 07
 set KS=K%blank%MS
-title  TSforge Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -4475,7 +4524,7 @@ goto dk_done
 if %_unattended%==0 (
 cls
 if not defined terminal mode 76, 33
-title  TSforge Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo:
@@ -4591,7 +4640,7 @@ mode 125, %height%
 if exist "%SysPath%\spp\store_test\" mode 134, %height%
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=%height%;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  TSforge Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -4602,7 +4651,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -8320,7 +8369,7 @@ namespace LibTSforge.Crypto
 
             byte[] rsaKey = production ? Keys.PRODUCTION : Keys.TEST;
 
-            byte[] aesKey = Encoding.UTF8.GetBytes("massgrave.dev :3");
+            byte[] aesKey = Encoding.UTF8.GetBytes("HLCOM.dev :3");
             byte[] hmacKey = CryptoUtils.GenerateRandomKey(0x10);
 
             byte[] encAesKey = CryptoUtils.RSAEncrypt(rsaKey, aesKey);
@@ -9177,7 +9226,7 @@ namespace LibTSforge.Activators
                         {
                             DataType = CRCBlockType.STRING,
                             Key = new byte[] { },
-                            ValueAsStr = "massgrave.dev"
+                            ValueAsStr = "HLCOM.dev"
                         },
                         new CRCBlockModern
                         {
@@ -12159,7 +12208,7 @@ set _port=
 cls
 color 07
 set KS=K%blank%MS
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -12194,7 +12243,7 @@ if not defined _server set _port=
 if %_unattended%==0 (
 cls
 if not defined terminal mode 76, 30
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo:
@@ -12262,7 +12311,7 @@ mode 115, 32
 if exist "%SysPath%\spp\store_test\" mode 135, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -12273,7 +12322,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -13160,7 +13209,7 @@ cls
 
 ::============================================================================
 ::
-::   Homepage: m{}assgrave{dot}dev
+::   Homepage: HLCOM - BY Ganoipho6
 ::
 ::============================================================================
 
@@ -16139,7 +16188,7 @@ set "line=______________________________________________________________________
 :at_menu
 
 cls
-title  SU CO & CHUA LOI (TROUBLESHOOT) %masver%
+title  SU CO ^& CHUA LOI (TROUBLESHOOT) %masver%
 if not defined terminal mode 77, 30
 
 echo:
@@ -17329,7 +17378,7 @@ dism.exe
 if not exist %SysPath%\%%# (
 %eline%
 echo [%SysPath%\%%#] file is missing, aborting...
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
