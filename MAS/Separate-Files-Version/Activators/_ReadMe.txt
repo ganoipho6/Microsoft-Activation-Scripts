@@ -10,4 +10,4 @@ Online KMS          -  Windows / Office       -  180 Days. Lifetime With Renewal
 --------------------------------------------------------------------------------------
 
 Check the below link for more details:
-https://massgrave.dev/chart
+#/chart

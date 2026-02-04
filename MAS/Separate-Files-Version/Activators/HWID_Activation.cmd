@@ -5,7 +5,7 @@
 
 ::============================================================================
 ::
-::   Homepage: m{}assgrave{dot}dev
+::   Homepage: HLCOM - BY Ganoipho6
 ::
 ::============================================================================
 
@@ -99,9 +99,9 @@ set "nul="
 ::========================================================================================================================================
 
 set "blank="
-set "mas=ht%blank%tps%blank%://m%blank%ass%blank%grave.dev/"
-set "github=ht%blank%tps%blank%://github.com/m%blank%assgra%blank%vel/Micro%blank%soft-Acti%blank%vation-Scripts"
-set "selfgit=ht%blank%tps%blank%://git.acti%blank%vated.win/Micr%blank%osoft-Act%blank%ivation-Scripts"
+set "mas=about:blank"
+set "github=about:blank"
+set "selfgit=about:blank"
 
 ::  Check if Null service is working, it's important for the batch script
 
@@ -139,7 +139,7 @@ popd
 
 cls
 color 07
-title  HWID Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -368,8 +368,8 @@ set pingp=
 set upver=%masver:.=%
 
 for %%A in (
-activ%-%ated.win
-mass%-%grave.dev
+localhost
+localhost
 ) do if not defined pingp (
 for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
 if not "%%B"=="" (set old=1& set pingp=1)
@@ -403,7 +403,7 @@ if not defined terminal (
 mode 110, 34
 if exist "%SysPath%\spp\store_test\" mode 134, 34
 )
-title  HWID Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...

@@ -5,7 +5,7 @@
 
 ::============================================================================
 ::
-::   Homepage: m{}assgrave{dot}dev
+::   Homepage: HLCOM - BY Ganoipho6
 ::
 ::============================================================================
 
@@ -124,9 +124,9 @@ set "nul="
 ::========================================================================================================================================
 
 set "blank="
-set "mas=ht%blank%tps%blank%://m%blank%ass%blank%grave.dev/"
-set "github=ht%blank%tps%blank%://github.com/m%blank%assgra%blank%vel/Micro%blank%soft-Acti%blank%vation-Scripts"
-set "selfgit=ht%blank%tps%blank%://git.acti%blank%vated.win/Micr%blank%osoft-Act%blank%ivation-Scripts"
+set "mas=about:blank"
+set "github=about:blank"
+set "selfgit=about:blank"
 
 ::  Check if Null service is working, it's important for the batch script
 
@@ -165,7 +165,7 @@ popd
 cls
 color 07
 set KS=K%blank%MS
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -408,8 +408,8 @@ set pingp=
 set upver=%masver:.=%
 
 for %%A in (
-activ%-%ated.win
-mass%-%grave.dev
+localhost
+localhost
 ) do if not defined pingp (
 for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
 if not "%%B"=="" (set old=1& set pingp=1)
@@ -448,7 +448,7 @@ if not defined _server set _port=
 if %_unattended%==0 (
 cls
 if not defined terminal mode 76, 30
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo:
@@ -516,7 +516,7 @@ mode 115, 32
 if exist "%SysPath%\spp\store_test\" mode 135, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -1718,7 +1718,7 @@ exit /b
 
 ::============================================================================
 ::
-::   Homepage: m{}assgrave{dot}dev
+::   Homepage: HLCOM - BY Ganoipho6
 ::
 ::============================================================================
 

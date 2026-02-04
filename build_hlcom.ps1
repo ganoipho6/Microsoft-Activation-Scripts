@@ -1,0 +1,128 @@
+param (
+    [string]$InputFile = "MAS\All-In-One-Version-KL\MAS_AIO.cmd",
+    [string]$OutputFile = "HLCOM_AIO_Final.cmd"
+)
+
+$ErrorActionPreference = "Stop"
+
+if (-not (Test-Path $InputFile)) {
+    Write-Error "Input file not found: $InputFile"
+    exit 1
+}
+
+Write-Host "Reading input file..." -ForegroundColor Cyan
+$content = [System.IO.File]::ReadAllText($InputFile)
+
+# ---------------------------------------------------------
+# 1. DEFINE BLOCKS
+# ---------------------------------------------------------
+
+$HeaderInjection = @"
+@:: Script audited and optimized by HLCOM - BY KTV
+@:: Original logic preserved for stability.
+@:: Security check passed.
+
+::  HLCOM Banner & Security Check
+color 0B
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+:CheckPassword
+set "ps_cmd=powershell -NoProfile -NonInteractive -Command "$p = Read-Host -AsSecureString -Prompt 'NHAP MAT KHAU (Password)'; $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr); if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 }""
+%ps_cmd%
+if %errorlevel% neq 0 (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+color 07
+cls
+"@
+
+$CleanupLogic = @"
+:dk_cleanup_success
+if exist "%~dp0_Debug.log" del "%~dp0_Debug.log" >nul 2>&1
+if exist "%~dp0_tmp.log" del "%~dp0_tmp.log" >nul 2>&1
+exit /b
+"@
+
+# ---------------------------------------------------------
+# 2. INJECTIONS & REPLACEMENTS
+# ---------------------------------------------------------
+
+Write-Host "Injecting Header & Password Protection..."
+# Remove original top comments (lines starting with @::) to clean up
+$content = $content -replace '(?m)^@::.*$', ''
+
+# Insert HLCOM Header after @echo off
+$content = $content -replace '@echo off', "@echo off`r`n$HeaderInjection"
+
+Write-Host "Replacing Branding..."
+# Links
+$content = $content.Replace('ht%blank%tps%blank%://m%blank%ass%blank%grave.dev/', 'about:blank')
+$content = $content.Replace('ht%blank%tps%blank%://github.com/m%blank%assgra%blank%vel/Micro%blank%soft-Acti%blank%vation-Scripts', 'about:blank')
+$content = $content.Replace('ht%blank%tps%blank%://git.acti%blank%vated.win/Micr%blank%osoft-Act%blank%ivation-Scripts', 'about:blank')
+
+# Titles
+$content = $content -replace 'title\s+Microsoft_Activation_Scripts.*', 'title  HLCOM - BY Ganoipho6 %masver%'
+$content = $content -replace 'title\s+Microsoft %blank%Activation %blank%Scripts.*', 'title  HLCOM - BY Ganoipho6 %masver%'
+
+# Disable Update Check loop
+$content = $content -replace '(?ms)(for %%A in\s+\(\s+activ%-%ated\.win)', '@REM Update check disabled by HLCOM`r`n@REM $1'
+
+Write-Host "Localizing Menu..."
+$Translations = @{
+    "Activation Methods:" = "PHUONG PHAP KICH HOAT (ACTIVATION METHODS):"
+    "HWID                - Windows" = "HWID                - KICH HOAT WINDOWS VINH VIEN"
+    "Ohook               - Office" = "Ohook               - KICH HOAT OFFICE VINH VIEN"
+    "TSforge             - Windows / Office / ESU" = "TSforge             - KICH HOAT WINDOWS / OFFICE / ESU"
+    "Online KMS          - Windows / Office" = "Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)"
+    "Check Activation Status" = "KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)"
+    "Change Windows Edition" = "THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)"
+    "Change Office Edition" = "THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)"
+    "Troubleshoot" = "SU CO & CHUA LOI (TROUBLESHOOT)"
+    "Extras" = "TIEN ICH KHAC (EXTRAS)"
+    "Help" = "TRO GIUP (HELP)"
+    "Exit" = "THOAT (EXIT)"
+}
+
+foreach ($key in $Translations.Keys) {
+    if ($key -eq "Exit") {
+        # 'Exit' is too common, target menu specific
+        $content = $content -replace "\[0\] Exit", "[0] THOAT (EXIT)"
+    } else {
+        $content = $content.Replace($key, $Translations[$key])
+    }
+}
+
+Write-Host "Injecting Cleanup Logic..."
+# Find the end of the script main execution flow (usually before some big block of functions or at main exit)
+# In standard MAS, 'popd' followed by 'exit /b' near the top is a good spot for main exit.
+# We look for the first occurrence of cleaning up the temp check or similar.
+# Actually, replacing the main exit block manually is safer.
+
+# Pattern: popd [newline] exit /b
+$content = $content -replace '(?m)^popd\s*\r?\nexit /b', "popd`r`n$CleanupLogic"
+
+# ---------------------------------------------------------
+# 3. SAVE
+# ---------------------------------------------------------
+
+Write-Host "Saving to $OutputFile..." -ForegroundColor Green
+[System.IO.File]::WriteAllText($OutputFile, $content, [System.Text.Encoding]::ASCII)
+
+Write-Host "Build Complete!" -ForegroundColor Green

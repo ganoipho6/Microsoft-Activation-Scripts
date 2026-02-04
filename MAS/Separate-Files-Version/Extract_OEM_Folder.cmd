@@ -5,7 +5,7 @@
 
 ::============================================================================
 ::
-::   Homepage: m{}assgrave{dot}dev
+::   Homepage: HLCOM - BY Ganoipho6
 ::
 ::============================================================================
 
@@ -59,9 +59,9 @@ exit /b
 ::========================================================================================================================================
 
 set "blank="
-set "mas=ht%blank%tps%blank%://m%blank%ass%blank%grave.dev/"
-set "github=ht%blank%tps%blank%://github.com/m%blank%assgra%blank%vel/Micro%blank%soft-Acti%blank%vation-Scripts"
-set "selfgit=ht%blank%tps%blank%://git.acti%blank%vated.win/Micr%blank%osoft-Act%blank%ivation-Scripts"
+set "mas=about:blank"
+set "github=about:blank"
+set "selfgit=about:blank"
 
 ::  Check if Null service is working, it's important for the batch script
 
@@ -338,8 +338,8 @@ set pingp=
 set upver=%masver:.=%
 
 for %%A in (
-activ%-%ated.win
-mass%-%grave.dev
+localhost
+localhost
 ) do if not defined pingp (
 for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
 if not "%%B"=="" (set old=1& set pingp=1)

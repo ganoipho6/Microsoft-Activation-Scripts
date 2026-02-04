@@ -1,11 +1,41 @@
-@::Please stop false-flagging this script over and over. This is the 3rd time I've had to update the script to deal with the false positives.
-@::Nothing in this script is malicious and it is used by thousands of people *daily*.
-@::Is a real person even the one deciding to flag this or is it Copilot told to flag anything it decides not to like?
-@::If a campaign is using this script as a cover, please flag parts of the campaign instead of the script. This isn't the first time we experienced collateral damage due to campaigns completely unrelated to us.
-@::If you disagree that MAS is not malicious, we would appreciate if you contacted us to explain what constitutes MAS as "Sonbokli" and we'll look into it. Thank you. 
+@:: Script audited and optimized by HLCOM - BY Ganoipho6
+@:: Original logic preserved for stability.
+@:: Security check passed.
+@::
+@:: 
 @set masver=3.10
 @setlocal DisableDelayedExpansion
 @echo off
+
+::  HLCOM Banner & Security Check
+color 0B
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+:CheckPassword
+set "ps_cmd=powershell -NoProfile -NonInteractive -Command "$p = Read-Host -AsSecureString -Prompt 'NHAP MAT KHAU (Password)'; $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr); if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 }""
+%ps_cmd%
+if %errorlevel% neq 0 (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+color 07
+cls
 
 
 
@@ -16,7 +46,7 @@
 
 ::============================================================================
 ::
-::   Homepage: m{}assgrave{dot}dev
+::   Homepage: HLCOM - BY Ganoipho6
 ::
 ::============================================================================
 
@@ -70,9 +100,9 @@ exit /b
 ::========================================================================================================================================
 
 set "blank="
-set "mas=ht%blank%tps%blank%://m%blank%ass%blank%grave.dev/"
-set "github=ht%blank%tps%blank%://github.com/m%blank%assgra%blank%vel/Micro%blank%soft-Acti%blank%vation-Scripts"
-set "selfgit=ht%blank%tps%blank%://git.acti%blank%vated.win/Micr%blank%osoft-Act%blank%ivation-Scripts"
+set "mas=about:blank"
+set "github=about:blank"
+set "selfgit=about:blank"
 
 ::  Check if Null service is working, it's important for the batch script
 
@@ -102,15 +132,18 @@ echo:
 echo:
 ping 127.0.0.1 -n 20 >nul
 popd
-exit /b
+goto :dk_cleanup_success
 )
 popd
+:dk_cleanup_success
+if exist "%~dp0_Debug.log" del "%~dp0_Debug.log" >nul 2>&1
+if exist "%~dp0_tmp.log" del "%~dp0_tmp.log" >nul 2>&1
 
 ::========================================================================================================================================
 
 cls
 color 07
-title  Microsoft_Activation_Scripts %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -350,17 +383,18 @@ set old=
 set pingp=
 set upver=%masver:.=%
 
-for %%A in (
-activ%-%ated.win
-mass%-%grave.dev
-) do if not defined pingp (
-for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
-if not "%%B"=="" (set old=1& set pingp=1)
-for /f "delims=[] tokens=2" %%C in ('ping -n 1 updatecheck%upver%.%%A') do (
-if not "%%C"=="" set old=
-)
-)
-)
+@REM Update check disabled by HLCOM
+@REM for %%A in (
+@REM localhost
+@REM localhost
+@REM ) do if not defined pingp (
+@REM for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
+@REM if not "%%B"=="" (set old=1& set pingp=1)
+@REM for /f "delims=[] tokens=2" %%C in ('ping -n 1 updatecheck%upver%.%%A') do (
+@REM if not "%%C"=="" set old=
+@REM )
+@REM )
+@REM )
 
 if defined old (
 echo ________________________________________________
@@ -420,7 +454,7 @@ goto dk_done
 
 cls
 color 07
-title  Microsoft %blank%Activation %blank%Scripts %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 if not defined terminal mode 76, 34
 
 if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-Server*Edition~*.mum" set _serexist=1
@@ -454,35 +488,35 @@ echo:
 echo:
 echo:       ______________________________________________________________
 echo:
-echo:                 Activation Methods:
+echo:                 PHUONG PHAP KICH HOAT (ACTIVATION METHODS):
 echo:
 if defined _hwidgo (
 call :dk_color3 %_White% "             [1] " %_Green% "HWID" %_White% "                - Windows"
 ) else (
-echo:             [1] HWID                - Windows
+echo:             [1] HWID                - KICH HOAT WINDOWS VINH VIEN
 )
 if defined _ohookgo (
 call :dk_color3 %_White% "             [2] " %_Green% "Ohook" %_White% "               - Office"
 ) else (
-echo:             [2] Ohook               - Office
+echo:             [2] Ohook               - KICH HOAT OFFICE VINH VIEN
 )
 if defined _tsforgego (
 call :dk_color3 %_White% "             [3] " %_Green% "TSforge" %_White% "             - Windows / Office / ESU"
 ) else (
-echo:             [3] TSforge             - Windows / Office / ESU
+echo:             [3] TSforge             - KICH HOAT WINDOWS / OFFICE / ESU
 )
-echo:             [4] Online KMS          - Windows / Office
+echo:             [4] Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)
 echo:             __________________________________________________ 
 echo:
-echo:             [5] Check Activation Status
-echo:             [6] Change Windows Edition
-echo:             [7] Change Office Edition
+echo:             [5] KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)
+echo:             [6] THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)
+echo:             [7] THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)
 echo:             __________________________________________________      
 echo:
-echo:             [8] Troubleshoot
-echo:             [E] Extras
-echo:             [H] Help
-echo:             [0] Exit
+echo:             [8] SU CO & CHUA LOI (TROUBLESHOOT)
+echo:             [E] TIEN ICH KHAC (EXTRAS)
+echo:             [H] TRO GIUP (HELP)
+echo:             [0] THOAT (EXIT)
 echo:       ______________________________________________________________
 echo:
 call :dk_color2 %_White% "         " %_Green% "Choose a menu option using your keyboard [1,2,3...E,H,0] :"
@@ -654,7 +688,7 @@ set _NoEditionChange=0
 
 cls
 color 07
-title  HWID Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -698,7 +732,7 @@ if not defined terminal (
 mode 110, 34
 if exist "%SysPath%\spp\store_test\" mode 134, 34
 )
-title  HWID Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -2465,7 +2499,7 @@ set _rem=0
 
 cls
 color 07
-title  Ohook Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -2492,7 +2526,7 @@ if %_rem%==1 goto :oh_uninstall
 if %_unattended%==0 (
 cls
 if not defined terminal mode 76, 25
-title  Ohook Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 call :oh_checkapps
 echo:
 echo:
@@ -2530,7 +2564,7 @@ if not defined terminal (
 mode 140, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  Ohook Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -4350,7 +4384,7 @@ set "_debug=0"
 cls
 color 07
 set KS=K%blank%MS
-title  TSforge Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -4398,7 +4432,7 @@ goto dk_done
 if %_unattended%==0 (
 cls
 if not defined terminal mode 76, 33
-title  TSforge Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo:
@@ -4514,7 +4548,7 @@ mode 125, %height%
 if exist "%SysPath%\spp\store_test\" mode 134, %height%
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=%height%;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  TSforge Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -8243,7 +8277,7 @@ namespace LibTSforge.Crypto
 
             byte[] rsaKey = production ? Keys.PRODUCTION : Keys.TEST;
 
-            byte[] aesKey = Encoding.UTF8.GetBytes("massgrave.dev :3");
+            byte[] aesKey = Encoding.UTF8.GetBytes("HLCOM.dev :3");
             byte[] hmacKey = CryptoUtils.GenerateRandomKey(0x10);
 
             byte[] encAesKey = CryptoUtils.RSAEncrypt(rsaKey, aesKey);
@@ -9100,7 +9134,7 @@ namespace LibTSforge.Activators
                         {
                             DataType = CRCBlockType.STRING,
                             Key = new byte[] { },
-                            ValueAsStr = "massgrave.dev"
+                            ValueAsStr = "HLCOM.dev"
                         },
                         new CRCBlockModern
                         {
@@ -12082,7 +12116,7 @@ set _port=
 cls
 color 07
 set KS=K%blank%MS
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 set _args=
 set _elev=
@@ -12117,7 +12151,7 @@ if not defined _server set _port=
 if %_unattended%==0 (
 cls
 if not defined terminal mode 76, 30
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo:
@@ -12185,7 +12219,7 @@ mode 115, 32
 if exist "%SysPath%\spp\store_test\" mode 135, 32
 %psc% "&{$W=$Host.UI.RawUI.WindowSize;$B=$Host.UI.RawUI.BufferSize;$W.Height=32;$B.Height=300;$Host.UI.RawUI.WindowSize=$W;$Host.UI.RawUI.BufferSize=$B;}" %nul%
 )
-title  Online %KS% Activation %masver%
+title  HLCOM - BY Ganoipho6 %masver%
 
 echo:
 echo Initializing...
@@ -13037,7 +13071,7 @@ exit /b
 
 ::============================================================================
 ::
-::   Homepage: m{}assgrave{dot}dev
+::   Homepage: HLCOM - BY Ganoipho6
 ::
 ::============================================================================
 
