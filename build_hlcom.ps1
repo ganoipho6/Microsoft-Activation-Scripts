@@ -21,9 +21,14 @@ $HeaderInjection = @'
 @:: Script audited and optimized by HLCOM - BY KTV
 @:: Original logic preserved for stability.
 @:: Security check passed.
+'@
 
-::  HLCOM Banner & Security Check
+$PasswordCheckInjection = @'
+::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
 color 0B
+cls
 echo.
 echo   _   _  _      _____  ____  __  __ 
 echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
@@ -38,11 +43,9 @@ echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
 echo ============================================================
 echo.
 
-:CheckPassword
 set "_hlcom_pass="
 set /p "_hlcom_pass=NHAP MAT KHAU: "
 
-:: Check password
 if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
     color 0C
     echo.
@@ -54,9 +57,9 @@ if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
 set "_hlcom_pass="
 color 07
 cls
+
+:MainMenu
 '@
-
-
 
 $CleanupLogic = @"
 :dk_cleanup_success
@@ -73,8 +76,20 @@ Write-Host "Injecting Header & Password Protection..."
 # Remove original top comments (lines starting with @::) to clean up
 $content = $content -replace '(?m)^@::.*$', ''
 
-# Insert HLCOM Header after @echo off
+# Insert HLCOM Header after @echo off (just comments, no password check)
 $content = $content -replace '@echo off', "@echo off`r`n$HeaderInjection"
+
+# Insert Password Check BEFORE :MainMenu (after all relaunch logic)
+# Use .Replace() for literal string matching - try both CRLF and LF
+if ($content.Contains(":MainMenu`r`n")) {
+    $content = $content.Replace(":MainMenu`r`n", $PasswordCheckInjection)
+    Write-Host "  -> Replaced :MainMenu (CRLF)"
+} elseif ($content.Contains(":MainMenu`n")) {
+    $content = $content.Replace(":MainMenu`n", $PasswordCheckInjection)
+    Write-Host "  -> Replaced :MainMenu (LF)"
+} else {
+    Write-Host "  -> WARNING: :MainMenu not found!" -ForegroundColor Yellow
+}
 
 Write-Host "Replacing Branding..."
 # Links

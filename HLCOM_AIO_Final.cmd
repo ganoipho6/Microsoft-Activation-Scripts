@@ -10,39 +10,6 @@
 @:: Original logic preserved for stability.
 @:: Security check passed.
 
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-set "_hlcom_pass="
-set /p "_hlcom_pass=NHAP MAT KHAU: "
-
-:: Check password
-if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
-)
-set "_hlcom_pass="
-color 07
-cls
-
 ::  For command line switches, check m{}assgrave{dot}dev/command_line_switches
 ::  If you want to better understand script, read from separate files version. 
 
@@ -458,8 +425,41 @@ goto dk_done
 
 ::========================================================================================================================================
 
-:MainMenu
+::========================================================================================================================================
 
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenu
 cls
 color 07
 title  HLCOM - BY Ganoipho6 %masver%
@@ -534,16 +534,313 @@ set _erl=%errorlevel%
 if %_erl%==11 exit /b
 if %_erl%==10 (start %selfgit% & start %github% & start %mas%troubleshoot & goto :MainMenu)
 if %_erl%==9 goto :TIEN ICH KHAC (EXTRAS)
-if %_erl%==8 setlocal & call :troubleshoot      & cls & endlocal & goto :MainMenu
-if %_erl%==7 setlocal & call :change_offedition & cls & endlocal & goto :MainMenu
-if %_erl%==6 setlocal & call :change_winedition & cls & endlocal & goto :MainMenu
-if %_erl%==5 setlocal & call :check_actstatus   & cls & endlocal & goto :MainMenu
-if %_erl%==4 setlocal & call :KMSActivation     & cls & endlocal & goto :MainMenu
-if %_erl%==3 setlocal & call :TSforgeActivation & cls & endlocal & goto :MainMenu
-if %_erl%==2 setlocal & call :OhookActivation   & cls & endlocal & goto :MainMenu
-if %_erl%==1 setlocal & call :HWIDActivation    & cls & endlocal & goto :MainMenu
-goto :MainMenu
+if %_erl%==8 setlocal & call :troubleshoot      & cls & endlocal & goto ::========================================================================================================================================
 
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenuif %_erl%==7 setlocal & call :change_offedition & cls & endlocal & goto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenuif %_erl%==6 setlocal & call :change_winedition & cls & endlocal & goto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenuif %_erl%==5 setlocal & call :check_actstatus   & cls & endlocal & goto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenuif %_erl%==4 setlocal & call :KMSActivation     & cls & endlocal & goto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenuif %_erl%==3 setlocal & call :TSforgeActivation & cls & endlocal & goto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenuif %_erl%==2 setlocal & call :OhookActivation   & cls & endlocal & goto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenuif %_erl%==1 setlocal & call :HWIDActivation    & cls & endlocal & goto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenugoto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenu
 :dk_color3
 
 if %_NCS% EQU 1 (
@@ -579,8 +876,41 @@ call :dk_color2 %_White% "             " %_Green% "Choose a menu option using yo
 choice /C:120 /N
 set _erl=%errorlevel%
 
-if %_erl%==3 goto :MainMenu
-if %_erl%==2 start %mas%genuine-installation-media & goto :TIEN ICH KHAC (EXTRAS)
+if %_erl%==3 goto ::========================================================================================================================================
+
+::  HLCOM Password Protection - Injected before MainMenu to avoid relaunch issues
+color 0B
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
+
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+set "_hlcom_pass="
+color 07
+cls
+
+:MainMenuif %_erl%==2 start %mas%genuine-installation-media & goto :TIEN ICH KHAC (EXTRAS)
 if %_erl%==1 goto :Extract$OEM$
 goto :TIEN ICH KHAC (EXTRAS)
 
@@ -658,39 +988,6 @@ echo @echo off
 @:: Script audited and optimized by HLCOM - BY KTV
 @:: Original logic preserved for stability.
 @:: Security check passed.
-
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-set "_hlcom_pass="
-set /p "_hlcom_pass=NHAP MAT KHAU: "
-
-:: Check password
-if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
-)
-set "_hlcom_pass="
-color 07
-cls
 echo fltmc ^>nul ^|^| exit /b
 echo call "%%~dp0MAS_AIO.cmd" %para%
 echo cd \
@@ -13113,39 +13410,6 @@ exit /b
 @:: Script audited and optimized by HLCOM - BY KTV
 @:: Original logic preserved for stability.
 @:: Security check passed.
-
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-set "_hlcom_pass="
-set /p "_hlcom_pass=NHAP MAT KHAU: "
-
-:: Check password
-if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
-)
-set "_hlcom_pass="
-color 07
-cls
 
 ::   Renew K-M-S activation with Online servers via scheduled task
 
