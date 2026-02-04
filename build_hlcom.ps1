@@ -39,7 +39,7 @@ echo ============================================================
 echo.
 
 :CheckPassword
-set "ps_cmd=powershell -NoProfile -NonInteractive -Command "$p = Read-Host -AsSecureString -Prompt 'NHAP MAT KHAU (Password)'; $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr); if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 }""
+set "ps_cmd=powershell -NoProfile -NonInteractive -Command "`$p = Read-Host -AsSecureString -Prompt 'NHAP MAT KHAU (Password)'; `$ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR(`$p); `$plain = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR(`$ptr); if (`$plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 }""
 %ps_cmd%
 if %errorlevel% neq 0 (
     color 0C
