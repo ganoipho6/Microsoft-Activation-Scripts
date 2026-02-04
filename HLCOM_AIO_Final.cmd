@@ -53,6 +53,38 @@ if %EXIT_CODE% NEQ 0 (
 color 07
 cls
 
+::  HLCOM Banner & Security Check
+color 0B
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+
+:CheckPassword
+set "ps_cmd=powershell -NoProfile -NonInteractive -Command "$p = Read-Host -AsSecureString -Prompt 'NHAP MAT KHAU (Password)'; $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr); if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 }""
+%ps_cmd%
+if %errorlevel% neq 0 (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    pause
+    exit
+)
+color 07
+cls
+
+
+
 ::  For command line switches, check m{}assgrave{dot}dev/command_line_switches
 ::  If you want to better understand script, read from separate files version. 
 
@@ -97,11 +129,19 @@ if /i "%%#"=="-qedit" (set re1=1&set re2=1)
 :: Re-launch the script with x64 process if it was initiated by x86 process on x64 bit Windows
 :: or with ARM64 process if it was initiated by x86/ARM32 process on ARM64 Windows
 
-@REM Arch re-launch disabled
+if exist %SystemRoot%\Sysnative\cmd.exe if not defined re1 (
+setlocal EnableDelayedExpansion
+start %SystemRoot%\Sysnative\cmd.exe /c ""!_cmdf!" %* re1"
+exit /b
+)
 
 :: Re-launch the script with ARM32 process if it was initiated by x64 process on ARM64 Windows
 
-@REM ARM Arch re-launch disabled
+if exist %SystemRoot%\SysArm32\cmd.exe if %PROCESSOR_ARCHITECTURE%==AMD64 if not defined re2 (
+setlocal EnableDelayedExpansion
+start %SystemRoot%\SysArm32\cmd.exe /c ""!_cmdf!" %* re2"
+exit /b
+)
 
 ::========================================================================================================================================
 
@@ -497,21 +537,21 @@ echo:
 echo:                 PHUONG PHAP KICH HOAT (ACTIVATION METHODS):
 echo:
 if defined _hwidgo (
-call :dk_color3 %_White% "             [1] " %_Green% "1. Kich hoat Windows Ban quyen So (Vinh vien)" %_White% ""
+call :dk_color3 %_White% "             [1] " %_Green% "1. KICH HOAT WINDOWS (VINH VIEN)" %_White% ""
 ) else (
-echo:             [1] 1. Kich hoat Windows Ban quyen So (Vinh vien)
+echo:             [1] 1. KICH HOAT WINDOWS (VINH VIEN)
 )
 if defined _ohookgo (
-call :dk_color3 %_White% "             [2] " %_Green% "2. Kich hoat Office (Vinh vien)" %_White% ""
+call :dk_color3 %_White% "             [2] " %_Green% "2. KICH HOAT OFFICE (VINH VIEN)" %_White% ""
 ) else (
-echo:             [2] 2. Kich hoat Office (Vinh vien)
+echo:             [2] 2. KICH HOAT OFFICE (VINH VIEN)
 )
 if defined _tsforgego (
-call :dk_color3 %_White% "             [3] " %_Green% "TSforge" %_White% "             - Windows / Office / ESU"
+call :dk_color3 %_White% "             [3] " %_Green% "3. KICH HOAT WINDOWS/OFFICE/ESU (VINH VIEN)" %_White% ""
 ) else (
-echo:             [3] TSforge             - KICH HOAT WINDOWS / OFFICE / ESU
+echo:             [3] 3. KICH HOAT WINDOWS/OFFICE/ESU (VINH VIEN)
 )
-echo:             [4] 4. Kich hoat 180 ngay (Windows/Office)
+echo:             [4] 4. KICH HOAT 180 NGAY (WINDOWS/OFFICE)
 echo:             __________________________________________________ 
 echo:
 echo:             [5] KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)
@@ -799,7 +839,7 @@ if not exist %SysPath%\%%# (
 echo [%SysPath%\%%#] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -1283,10 +1323,10 @@ set "nceline=echo: &echo ==== ERROR ==== &echo:"
 set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
 if %~z0 GEQ 200000 (
 set "_exitmsg=Go back"
-set "_fixmsg=Go back to Main Menu, select Troubleshoot and run Fix Licensing option."
+set "_fixmsg=Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run Fix Licensing option."
 ) else (
 set "_exitmsg=Exit"
-set "_fixmsg=In MAS folder, run Troubleshoot script and select Fix Licensing option."
+set "_fixmsg=In MAS folder, run SU CO VA CHUA LOI (TROUBLESHOOT) script and select Fix Licensing option."
 )
 exit /b
 
@@ -1539,7 +1579,7 @@ if %spperror% NEQ 1056 if %spperror% NEQ 0 (
 echo sc start %_slser% [Error Code: %spperror%]
 if %spperror% EQU 1053 (
 call :dk_color %Blue% "Reboot your machine using the restart option and try again."
-call :dk_color %Blue% "If it still does not work, go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
+call :dk_color %Blue% "If it still does not work, go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
 )
 )
 
@@ -1857,7 +1897,7 @@ if defined wmifailed (
 call :dk_color %Red% "Checking WMI                            [Not Working]"
 
 if not defined showfix (
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WMI option."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run Fix WMI option."
 echo:
 )
 set error=1
@@ -1986,7 +2026,7 @@ if defined chkalp (
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 if not defined showfix (
 echo "%wpainfo%" | find /i "Error Found" %nul% && (
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
 echo:
 set error=1
 set showfix=1
@@ -1999,7 +2039,7 @@ if not defined chkalp (
 if %wpainfo% GEQ 5000 (
 call :dk_color %Gray% "Checking WPA Registry Count             [%wpainfo%]"
 call :dk_color %Blue% "A large number of WPA registries have been found, which may cause high CPU usage."
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
 echo:
 ) else (
 echo Checking WPA Registry Count             [%wpainfo%]
@@ -2627,7 +2667,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -4611,7 +4651,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -12282,7 +12322,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -16148,7 +16188,7 @@ set "line=______________________________________________________________________
 :at_menu
 
 cls
-title  Troubleshoot %masver%
+title  SU CO VA CHUA LOI (TROUBLESHOOT) %masver%
 if not defined terminal mode 77, 30
 
 echo:
@@ -17338,7 +17378,7 @@ dism.exe
 if not exist %SysPath%\%%# (
 %eline%
 echo [%SysPath%\%%#] file is missing, aborting...
-call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select SU CO VA CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"

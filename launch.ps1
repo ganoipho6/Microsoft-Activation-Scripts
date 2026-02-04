@@ -2,17 +2,6 @@ $ErrorActionPreference = "Stop"
 $RepoURL = "https://raw.githubusercontent.com/ganoipho6/Microsoft-Activation-Scripts/master/HLCOM_AIO_Final.cmd"
 $TempPath = "$env:temp\HLCOM_AIO.cmd"
 
-# --- Admin Check ---
-$currentPrincipal = New-Object Security.Principal.WindowsPrincipal([Security.Principal.WindowsIdentity]::GetCurrent())
-if (-not $currentPrincipal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
-    Write-Host "==========================================================" -ForegroundColor Yellow
-    Write-Host "   YEU CAU QUYEN ADMIN! DANG KHOI DONG LAI..." -ForegroundColor Yellow
-    Write-Host "==========================================================" -ForegroundColor Yellow
-    Start-Process powershell.exe -ArgumentList "-NoProfile -ExecutionPolicy Bypass -Command `"irm https://raw.githubusercontent.com/ganoipho6/Microsoft-Activation-Scripts/master/launch.ps1 | iex`"" -Verb RunAs
-    exit
-}
-# -------------------
-
 try {
     Write-Host "Dang ket noi den may chu HLCOM..." -ForegroundColor Cyan
     # Download the CMD file

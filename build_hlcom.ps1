@@ -84,12 +84,6 @@ Write-Host "Injecting Header & Password Protection..."
 $content = $content -replace '(?m)^@::.*$', ''
 
 # Insert HLCOM Header after @echo off
-
-# First, generic cleanup of previous HLCOM injections if they exist in the source (to avoid duplication and bugs)
-# Matches from "::  HLCOM Banner" down to the "cls" that follows the password check.
-$content = $content -replace '(?s)::\s+HLCOM Banner.*?cls\s*', ''
-
-# Now inject the fresh, correct header
 $content = $content -replace '@echo off', "@echo off`r`n$HeaderInjection"
 
 Write-Host "Replacing Branding..."
@@ -105,41 +99,44 @@ $content = $content -replace 'title\s+Microsoft %blank%Activation %blank%Scripts
 # Disable Update Check loop
 $content = $content -replace '(?ms)(for %%A in\s+\(\s+activ%-%ated\.win)', '@REM Update check disabled by HLCOM`r`n@REM $1'
 
-Write-Host "Removing Integrity / LF Checks & Arch Re-launch..."
+Write-Host "Removing Integrity / LF Checks..."
 # Remove the "Check LF line ending" block (Principle 3)
 $lfCheckPattern = '(?ms)::\s*Check LF line ending\s+pushd "%~dp0".*?popd\s+exit /b\s+\)\s+popd'
 $content = $content -replace $lfCheckPattern, '@REM Integrity check removed by HLCOM'
 
-# Disable architecture re-launching (Causes "flashing" issues when run from temp files)
-$content = $content -replace '(?ms)^if exist %SystemRoot%\\Sysnative\\cmd\.exe.*?exit /b\s*\)', '@REM Arch re-launch disabled'
-$content = $content -replace '(?ms)^if exist %SystemRoot%\\SysArm32\\cmd\.exe.*?exit /b\s*\)', '@REM ARM Arch re-launch disabled'
-
 Write-Host "Localizing Menu..."
+
+# Fix the & character in batch file (causes CHUA error)
+$content = $content.Replace('SU CO & CHUA LOI', 'SU CO VA CHUA LOI')
+
+# Main Menu Translations - dk_color3 calls (highlighted options)
+$content = $content.Replace('"HWID" %_White% "                - Windows"', '"1. KICH HOAT WINDOWS (VINH VIEN)" %_White% ""')
+$content = $content.Replace('"Ohook" %_White% "               - Office"', '"2. KICH HOAT OFFICE (VINH VIEN)" %_White% ""')
+$content = $content.Replace('"TSforge" %_White% "             - Windows / Office / ESU"', '"3. KICH HOAT WINDOWS/OFFICE/ESU (VINH VIEN)" %_White% ""')
+
+# Main Menu Translations - plain echo (non-highlighted options)
+$content = $content.Replace('[1] HWID                - KICH HOAT WINDOWS VINH VIEN', '[1] 1. KICH HOAT WINDOWS (VINH VIEN)')
+$content = $content.Replace('[2] Ohook               - KICH HOAT OFFICE VINH VIEN', '[2] 2. KICH HOAT OFFICE (VINH VIEN)')
+$content = $content.Replace('[3] TSforge             - KICH HOAT WINDOWS / OFFICE / ESU', '[3] 3. KICH HOAT WINDOWS/OFFICE/ESU (VINH VIEN)')
+$content = $content.Replace('[4] Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)', '[4] 4. KICH HOAT 180 NGAY (WINDOWS/OFFICE)')
+
+# Fallback - in case original text still exists
 $Translations = @{
     "Activation Methods:" = "PHUONG PHAP KICH HOAT (ACTIVATION METHODS):"
-    "HWID                - KICH HOAT WINDOWS VINH VIEN" = "1. Kich hoat Windows Ban quyen So (Vinh vien)"
-    "Ohook               - KICH HOAT OFFICE VINH VIEN" = "2. Kich hoat Office (Vinh vien)"
-    '"HWID" %_White% "                - Windows"' = '"1. Kich hoat Windows Ban quyen So (Vinh vien)" %_White% ""'
-    '"Ohook" %_White% "               - Office"' = '"2. Kich hoat Office (Vinh vien)" %_White% ""'
-    "TSforge             - Windows / Office / ESU" = "TSforge             - KICH HOAT WINDOWS / OFFICE / ESU"
-    "Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)" = "4. Kich hoat 180 ngay (Windows/Office)"
     "Check Activation Status" = "KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)"
     "Change Windows Edition" = "THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)"
     "Change Office Edition" = "THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)"
-    "SU CO & CHUA LOI (TROUBLESHOOT)" = "SU CO VA CHUA LOI (TROUBLESHOOT)"
+    "Troubleshoot" = "SU CO VA CHUA LOI (TROUBLESHOOT)"
     "Extras" = "TIEN ICH KHAC (EXTRAS)"
     "Help" = "TRO GIUP (HELP)"
-    "Exit" = "THOAT (EXIT)"
 }
 
 foreach ($key in $Translations.Keys) {
-    if ($key -eq "Exit") {
-        # 'Exit' is too common, target menu specific
-        $content = $content -replace "\[0\] Exit", "[0] THOAT (EXIT)"
-    } else {
-        $content = $content.Replace($key, $Translations[$key])
-    }
+    $content = $content.Replace($key, $Translations[$key])
 }
+
+# Handle Exit separately (too common)
+$content = $content -replace "\[0\] Exit", "[0] THOAT (EXIT)"
 
 Write-Host "Injecting Cleanup Logic..."
 # Find the end of the script main execution flow (usually before some big block of functions or at main exit)
