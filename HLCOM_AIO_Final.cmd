@@ -97,19 +97,11 @@ if /i "%%#"=="-qedit" (set re1=1&set re2=1)
 :: Re-launch the script with x64 process if it was initiated by x86 process on x64 bit Windows
 :: or with ARM64 process if it was initiated by x86/ARM32 process on ARM64 Windows
 
-if exist %SystemRoot%\Sysnative\cmd.exe if not defined re1 (
-setlocal EnableDelayedExpansion
-start %SystemRoot%\Sysnative\cmd.exe /c ""!_cmdf!" %* re1"
-exit /b
-)
+@REM Arch re-launch disabled
 
 :: Re-launch the script with ARM32 process if it was initiated by x64 process on ARM64 Windows
 
-if exist %SystemRoot%\SysArm32\cmd.exe if %PROCESSOR_ARCHITECTURE%==AMD64 if not defined re2 (
-setlocal EnableDelayedExpansion
-start %SystemRoot%\SysArm32\cmd.exe /c ""!_cmdf!" %* re2"
-exit /b
-)
+@REM ARM Arch re-launch disabled
 
 ::========================================================================================================================================
 
@@ -133,7 +125,22 @@ ping 127.0.0.1 -n 20
 )
 cls
 
-@REM Integrity check removed by HLCOM
+::  Check LF line ending
+
+pushd "%~dp0"
+>nul findstr /v "$" "%~nx0" && (
+echo:
+echo Error - Script either has LF line ending issue or an empty line at the end of the script is missing.
+echo:
+echo:
+echo Check this webpage for help - %mas%troubleshoot
+echo:
+echo:
+ping 127.0.0.1 -n 20 >nul
+popd
+goto :dk_cleanup_success
+)
+popd
 :dk_cleanup_success
 if exist "%~dp0_Debug.log" del "%~dp0_Debug.log" >nul 2>&1
 if exist "%~dp0_tmp.log" del "%~dp0_tmp.log" >nul 2>&1
