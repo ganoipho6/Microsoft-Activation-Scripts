@@ -66,12 +66,6 @@ color 07
 cls
 '@
 
-# ... (Previous Code) ...
-
-Write-Host "Saving to $OutputFile..." -ForegroundColor Green
-# FORCE CRLF and ASCII Encoding
-$content = $content.Replace("`r`n", "`n").Replace("`n", "`r`n")
-[System.IO.File]::WriteAllText($OutputFile, $content, [System.Text.Encoding]::ASCII)
 
 
 $CleanupLogic = @"
@@ -144,6 +138,16 @@ $content = $content -replace '(?m)^popd\s*\r?\nexit /b', "popd`r`n$CleanupLogic"
 # ---------------------------------------------------------
 
 Write-Host "Saving to $OutputFile..." -ForegroundColor Green
+
+# CRITICAL: Ensure CRLF line endings for Windows Batch compatibility
+$content = $content.Replace("`r`n", "`n").Replace("`n", "`r`n")
+
+# Add empty line at EOF (required by original MAS script check)
+if (-not $content.EndsWith("`r`n")) {
+    $content += "`r`n"
+}
+
+# Save with ASCII encoding
 [System.IO.File]::WriteAllText($OutputFile, $content, [System.Text.Encoding]::ASCII)
 
 Write-Host "Build Complete!" -ForegroundColor Green
