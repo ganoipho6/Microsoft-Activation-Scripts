@@ -34,8 +34,6 @@ catch {
     Write-Error $_.Exception.Message
 }
 finally {
-    # Cleanup
-    if (Test-Path $TempPath) {
-        Remove-Item $TempPath -Force -ErrorAction SilentlyContinue
-    }
+    # Cleanup disabled as MAS script uses separate processes (start cmd /c) for relaunching.
+    # Deleting here would cause the relaunched window to fail finding the script.
 }

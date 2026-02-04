@@ -106,9 +106,14 @@ $content = $content -replace 'title\s+Microsoft %blank%Activation %blank%Scripts
 $content = $content -replace '(?ms)(for %%A in\s+\(\s+activ%-%ated\.win)', '@REM Update check disabled by HLCOM`r`n@REM $1'
 
 Write-Host "Removing Integrity / LF Checks..."
-# Remove the "Check LF line ending" block (Principle 3)
-$lfCheckPattern = '(?ms)::\s*Check LF line ending\s+pushd "%~dp0".*?popd\s+exit /b\s+\)\s+popd'
-$content = $content -replace $lfCheckPattern, '@REM Integrity check removed by HLCOM'
+# More robust removal of the integrity check block
+$lfCheckBlock = '(?ms)::\s*Check LF line ending.*?popd\s+goto\s+:dk_cleanup_success\s+\)\s+popd'
+if ($content -match $lfCheckBlock) {
+    $content = $content -replace $lfCheckBlock, '@REM Integrity check removed by HLCOM'
+} else {
+    # Fallback for original or slightly different structures
+    $content = $content -replace '(?ms)::\s*Check LF line ending.*?exit\s+/b\s+\)\s+popd', '@REM Integrity check removed by HLCOM'
+}
 
 Write-Host "Localizing Menu..."
 $Translations = @{
@@ -144,7 +149,8 @@ Write-Host "Injecting Cleanup Logic..."
 # Actually, replacing the main exit block manually is safer.
 
 # Pattern: popd [newline] exit /b
-$content = $content -replace '(?m)^popd\s*\r?\nexit /b', "popd`r`n$CleanupLogic"
+# We use a more specific anchor to avoid accidentally replacing the logic inside loops if any
+$content = $content -replace '(?m)^popd\s*\r?\nexit /b\s*$', "popd`r`n$CleanupLogic"
 
 # ---------------------------------------------------------
 # 3. SAVE
