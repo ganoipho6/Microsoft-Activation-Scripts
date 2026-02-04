@@ -39,22 +39,11 @@ echo ============================================================
 echo.
 
 :CheckPassword
-:: Create Temp PowerShell Script
-set "pass_script=%temp%\hlcom_pass_check.ps1"
-echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
-echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
-echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
-echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
 
-:: Run Script
-powershell -ExecutionPolicy Bypass -File "%pass_script%"
-set "EXIT_CODE=%errorlevel%"
-
-:: Cleanup Temp Script
-del "%pass_script%" >nul 2>&1
-
-:: Verify logic
-if %EXIT_CODE% NEQ 0 (
+:: Check password
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
     color 0C
     echo.
     echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
@@ -62,6 +51,7 @@ if %EXIT_CODE% NEQ 0 (
     pause
     exit
 )
+set "_hlcom_pass="
 color 07
 cls
 '@

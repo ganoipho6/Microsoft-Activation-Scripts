@@ -27,22 +27,11 @@ echo ============================================================
 echo.
 
 :CheckPassword
-:: Create Temp PowerShell Script
-set "pass_script=%temp%\hlcom_pass_check.ps1"
-echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
-echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
-echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
-echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
 
-:: Run Script
-powershell -ExecutionPolicy Bypass -File "%pass_script%"
-set "EXIT_CODE=%errorlevel%"
-
-:: Cleanup Temp Script
-del "%pass_script%" >nul 2>&1
-
-:: Verify logic
-if %EXIT_CODE% NEQ 0 (
+:: Check password
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
     color 0C
     echo.
     echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
@@ -50,39 +39,12 @@ if %EXIT_CODE% NEQ 0 (
     pause
     exit
 )
+set "_hlcom_pass="
 color 07
 cls
 
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-set "ps_cmd=powershell -NoProfile -NonInteractive -Command "$p = Read-Host -AsSecureString -Prompt 'NHAP MAT KHAU (Password)'; $ptr = [System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); $plain = [System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($ptr); if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 }""
-%ps_cmd%
-if %errorlevel% neq 0 (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
-)
-color 07
-cls
-
+::  For command line switches, check m{}assgrave{dot}dev/command_line_switches
+::  If you want to better understand script, read from separate files version. 
 
 
 ::  For command line switches, check m{}assgrave{dot}dev/command_line_switches
@@ -714,22 +676,11 @@ echo ============================================================
 echo.
 
 :CheckPassword
-:: Create Temp PowerShell Script
-set "pass_script=%temp%\hlcom_pass_check.ps1"
-echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
-echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
-echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
-echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
 
-:: Run Script
-powershell -ExecutionPolicy Bypass -File "%pass_script%"
-set "EXIT_CODE=%errorlevel%"
-
-:: Cleanup Temp Script
-del "%pass_script%" >nul 2>&1
-
-:: Verify logic
-if %EXIT_CODE% NEQ 0 (
+:: Check password
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
     color 0C
     echo.
     echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
@@ -737,6 +688,7 @@ if %EXIT_CODE% NEQ 0 (
     pause
     exit
 )
+set "_hlcom_pass="
 color 07
 cls
 echo fltmc ^>nul ^|^| exit /b
@@ -13179,22 +13131,11 @@ echo ============================================================
 echo.
 
 :CheckPassword
-:: Create Temp PowerShell Script
-set "pass_script=%temp%\hlcom_pass_check.ps1"
-echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
-echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
-echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
-echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
+set "_hlcom_pass="
+set /p "_hlcom_pass=NHAP MAT KHAU: "
 
-:: Run Script
-powershell -ExecutionPolicy Bypass -File "%pass_script%"
-set "EXIT_CODE=%errorlevel%"
-
-:: Cleanup Temp Script
-del "%pass_script%" >nul 2>&1
-
-:: Verify logic
-if %EXIT_CODE% NEQ 0 (
+:: Check password
+if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
     color 0C
     echo.
     echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
@@ -13202,6 +13143,7 @@ if %EXIT_CODE% NEQ 0 (
     pause
     exit
 )
+set "_hlcom_pass="
 color 07
 cls
 
