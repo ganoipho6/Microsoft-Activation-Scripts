@@ -21,14 +21,9 @@ $HeaderInjection = @'
 @:: Script audited and optimized by HLCOM - BY KTV
 @:: Original logic preserved for stability.
 @:: Security check passed.
-'@
 
-$PasswordCheckInjection = @'
-::========================================================================================================================================
-
-::  HLCOM Password Protection
+::  HLCOM Banner & Security Check
 color 0B
-cls
 echo.
 echo   _   _  _      _____  ____  __  __ 
 echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
@@ -43,23 +38,35 @@ echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
 echo ============================================================
 echo.
 
-set "_hlcom_pass="
-set /p "_hlcom_pass=NHAP MAT KHAU (Password): "
+:CheckPassword
+:: Create Temp PowerShell Script
+set "pass_script=%temp%\hlcom_pass_check.ps1"
+echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
+echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
+echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
+echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
 
-if /i not "%_hlcom_pass%"=="toiyeuhailongcomputer" (
+:: Run Script
+powershell -ExecutionPolicy Bypass -File "%pass_script%"
+set "EXIT_CODE=%errorlevel%"
+
+:: Cleanup Temp Script
+del "%pass_script%" >nul 2>&1
+
+:: Verify logic
+if %EXIT_CODE% NEQ 0 (
     color 0C
     echo.
     echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
     echo.
     pause
-    exit /b
+    exit
 )
-set "_hlcom_pass="
 color 07
 cls
-
-:MainMenu
 '@
+
+
 
 $CleanupLogic = @"
 :dk_cleanup_success
@@ -73,20 +80,11 @@ exit /b
 # ---------------------------------------------------------
 
 Write-Host "Injecting Header & Password Protection..."
-# Clean up any potential double echo off or previous injections
+# Remove original top comments (lines starting with @::) to clean up
 $content = $content -replace '(?m)^@::.*$', ''
 
 # Insert HLCOM Header after @echo off
-if ($content -contains "@echo off") {
-    $content = $content.Replace("@echo off", "@echo off`r`n$HeaderInjection")
-}
-
-# Insert Password Check BEFORE :MainMenu (the one after all relaunch logic)
-# We use literal replace to ensure it hits the right spot
-if ($content.Contains(":MainMenu`r`n")) {
-    $content = $content.Replace(":MainMenu`r`n", $PasswordCheckInjection)
-    Write-Host "  -> Password protection injected before MainMenu" -ForegroundColor Green
-}
+$content = $content -replace '@echo off', "@echo off`r`n$HeaderInjection"
 
 Write-Host "Replacing Branding..."
 # Links
@@ -102,44 +100,62 @@ $content = $content -replace 'title\s+Microsoft %blank%Activation %blank%Scripts
 $content = $content -replace '(?ms)(for %%A in\s+\(\s+activ%-%ated\.win)', '@REM Update check disabled by HLCOM`r`n@REM $1'
 
 Write-Host "Removing Integrity / LF Checks..."
+# Remove the "Check LF line ending" block (Principle 3)
 $lfCheckPattern = '(?ms)::\s*Check LF line ending\s+pushd "%~dp0".*?popd\s+exit /b\s+\)\s+popd'
 $content = $content -replace $lfCheckPattern, '@REM Integrity check removed by HLCOM'
 
 Write-Host "Localizing Menu..."
-# Fix the & character
-$content = $content.Replace('SU CO & CHUA LOI', 'SU CO VA CHUA LOI')
-
-# Translations
-$content = $content.Replace('"HWID" %_White% "                - Windows"', '"1. KICH HOAT WINDOWS (VINH VIEN)" %_White% ""')
-$content = $content.Replace('"Ohook" %_White% "               - Office"', '"2. KICH HOAT OFFICE (VINH VIEN)" %_White% ""')
-$content = $content.Replace('"TSforge" %_White% "             - Windows / Office / ESU"', '"3. KICH HOAT WINDOWS/OFFICE/ESU (VINH VIEN)" %_White% ""')
-$content = $content.Replace('[4] Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)', '[4] 4. KICH HOat 180 NGAY (WINDOWS/OFFICE)')
-
 $Translations = @{
     "Activation Methods:" = "PHUONG PHAP KICH HOAT (ACTIVATION METHODS):"
-    "Check Activation Status" = "KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)"
-    "Change Windows Edition" = "THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)"
-    "Change Office Edition" = "THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)"
-    "Troubleshoot" = "SU CO VA CHUA LOI (TROUBLESHOOT)"
-    "Extras" = "TIEN ICH KHAC (EXTRAS)"
-    "Help" = "TRO GIUP (HELP)"
+    ' "                - Windows"' = ' "                - KICH HOAT WINDOWS (VINH VIEN)"'
+    ' "               - Office"'  = ' "               - KICH HOAT OFFICE (VINH VIEN)"'
+    ' "             - Windows / Office / ESU"' = ' "             - KICH HOAT TONG HOP (WINDOWS / OFFICE / ESU)"'
+    "\[1\] HWID                - Windows" = "[1] HWID                - KICH HOAT WINDOWS (VINH VIEN)"
+    "\[2\] Ohook               - Office" = "[2] Ohook               - KICH HOAT OFFICE (VINH VIEN)"
+    "\[3\] TSforge             - Windows / Office / ESU" = "[3] TSforge             - KICH HOAT TONG HOP (WINDOWS / OFFICE / ESU)"
+    "\[4\] Online KMS          - Windows / Office" = "[4] Online KMS          - KICH HOAT ONLINE (180 NGAY)"
+    "\[5\] Check Activation Status" = "[5] KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)"
+    "\[6\] Change Windows Edition" = "[6] THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)"
+    "\[7\] Change Office Edition" = "[7] THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)"
+    "\[8\] Troubleshoot" = "[8] SU CO ^& XU LY LOI (TROUBLESHOOT)"
+    "\[E\] Extras" = "[E] TIEN ICH KHAC (EXTRAS)"
+    "\[H\] Help" = "[H] TRO GIUP (HELP)"
+    "\[0\] Exit" = "[0] THOAT (EXIT)"
 }
 
 foreach ($key in $Translations.Keys) {
-    $content = $content.Replace($key, $Translations[$key])
+    if ($key -match "\\") {
+        # Regex replacement for items with brackets or special patterns
+        $content = $content -replace $key, $Translations[$key]
+    } else {
+        $content = $content.Replace($key, $Translations[$key])
+    }
 }
 
-$content = $content -replace "\[0\] Exit", "[0] THOAT (EXIT)"
-
 Write-Host "Injecting Cleanup Logic..."
+# Find the end of the script main execution flow (usually before some big block of functions or at main exit)
+# In standard MAS, 'popd' followed by 'exit /b' near the top is a good spot for main exit.
+# We look for the first occurrence of cleaning up the temp check or similar.
+# Actually, replacing the main exit block manually is safer.
+
+# Pattern: popd [newline] exit /b
 $content = $content -replace '(?m)^popd\s*\r?\nexit /b', "popd`r`n$CleanupLogic"
 
 # ---------------------------------------------------------
 # 3. SAVE
 # ---------------------------------------------------------
+
 Write-Host "Saving to $OutputFile..." -ForegroundColor Green
+
+# CRITICAL: Ensure CRLF line endings for Windows Batch compatibility
 $content = $content.Replace("`r`n", "`n").Replace("`n", "`r`n")
-if (-not $content.EndsWith("`r`n")) { $content += "`r`n" }
+
+# Add empty line at EOF (required by original MAS script check)
+if (-not $content.EndsWith("`r`n")) {
+    $content += "`r`n"
+}
+
+# Save with ASCII encoding
 [System.IO.File]::WriteAllText($OutputFile, $content, [System.Text.Encoding]::ASCII)
 
 Write-Host "Build Complete!" -ForegroundColor Green

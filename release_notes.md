@@ -1,4 +1,14 @@
-# HLCOM Activation Suite v1.0 (Release Notes)
+# HLCOM Activation Suite v1.1 (Release Notes)
+
+**Phát hành ngày**: 04/02/2026
+**Phiên bản nội bộ**: v1.1 (Hotfix & Localization)
+
+## 🛠 Bản sửa lỗi (Hotfix)
+*   **Sửa lỗi lệnh 'CHUA'**: Xử lý lỗi cú pháp CMD khi gặp ký tự đặc biệt `&` trong menu Troubleshoot.
+*   **Hoàn thiện Việt hóa**: Menu [1] (HWID) và [2] (Ohook) hiện đã hiển thị Tiếng Việt đầy đủ thay vì tiếng Anh như bản v1.0.
+*   **Tối ưu hóa Build Tool**: Cập nhật `build_hlcom.ps1` với cơ chế regex thông minh hơn để thay thế chuỗi chính xác mà không làm hỏng logic script.
+
+## 🚀 Tính năng nổi bật (v1.0)
 
 **Phát hành ngày**: 04/02/2026
 **Phiên bản nội bộ**: v1.0 (Build 3.10 Upstream)
