@@ -559,7 +559,7 @@ echo:             [6] THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)
 echo:             [7] THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)
 echo:             __________________________________________________      
 echo:
-echo:             [8] SU CO ^& CHUA LOI (TROUBLESHOOT)
+echo:             [8] SU CO VA CHUA LOI (TROUBLESHOOT)
 echo:             [E] TIEN ICH KHAC (EXTRAS)
 echo:             [H] TRO GIUP (HELP)
 echo:             [0] THOAT (EXIT)
@@ -839,7 +839,7 @@ if not exist %SysPath%\%%# (
 echo [%SysPath%\%%#] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -1323,10 +1323,10 @@ set "nceline=echo: &echo ==== ERROR ==== &echo:"
 set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
 if %~z0 GEQ 200000 (
 set "_exitmsg=Go back"
-set "_fixmsg=Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix Licensing option."
+set "_fixmsg=Go back to Main Menu, select Troubleshoot and run Fix Licensing option."
 ) else (
 set "_exitmsg=Exit"
-set "_fixmsg=In MAS folder, run SU CO ^& CHUA LOI (TROUBLESHOOT) script and select Fix Licensing option."
+set "_fixmsg=In MAS folder, run Troubleshoot script and select Fix Licensing option."
 )
 exit /b
 
@@ -1579,7 +1579,7 @@ if %spperror% NEQ 1056 if %spperror% NEQ 0 (
 echo sc start %_slser% [Error Code: %spperror%]
 if %spperror% EQU 1053 (
 call :dk_color %Blue% "Reboot your machine using the restart option and try again."
-call :dk_color %Blue% "If it still does not work, go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "If it still does not work, go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
 )
 )
 
@@ -1897,7 +1897,7 @@ if defined wmifailed (
 call :dk_color %Red% "Checking WMI                            [Not Working]"
 
 if not defined showfix (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix WMI option."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WMI option."
 echo:
 )
 set error=1
@@ -2026,7 +2026,7 @@ if defined chkalp (
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 if not defined showfix (
 echo "%wpainfo%" | find /i "Error Found" %nul% && (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
 echo:
 set error=1
 set showfix=1
@@ -2039,7 +2039,7 @@ if not defined chkalp (
 if %wpainfo% GEQ 5000 (
 call :dk_color %Gray% "Checking WPA Registry Count             [%wpainfo%]"
 call :dk_color %Blue% "A large number of WPA registries have been found, which may cause high CPU usage."
-call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
 echo:
 ) else (
 echo Checking WPA Registry Count             [%wpainfo%]
@@ -2667,7 +2667,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -4651,7 +4651,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -12322,7 +12322,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -16188,7 +16188,7 @@ set "line=______________________________________________________________________
 :at_menu
 
 cls
-title  SU CO ^& CHUA LOI (TROUBLESHOOT) %masver%
+title  Troubleshoot %masver%
 if not defined terminal mode 77, 30
 
 echo:
@@ -17378,7 +17378,7 @@ dism.exe
 if not exist %SysPath%\%%# (
 %eline%
 echo [%SysPath%\%%#] file is missing, aborting...
-call :dk_color %Blue% "Go back to Main Menu, select SU CO ^& CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
