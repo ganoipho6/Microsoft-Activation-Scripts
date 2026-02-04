@@ -488,41 +488,41 @@ echo:
 echo:                 PHUONG PHAP KICH HOAT (ACTIVATION METHODS):
 echo:
 if defined _hwidgo (
-call :dk_color3 %_White% "             [1] " %_Green% "HWID" %_White% "                - Windows"
+call :dk_color3 %_White% "             [1] " %_Green% "HWID" %_White% "                - Kich hoat Windows vinh vien (Nen dung)"
 ) else (
-echo:             [1] HWID                - KICH HOAT WINDOWS VINH VIEN
+echo:             [1] HWID                - Kich hoat Windows vinh vien (Nen dung)
 )
 if defined _ohookgo (
-call :dk_color3 %_White% "             [2] " %_Green% "Ohook" %_White% "               - Office"
+call :dk_color3 %_White% "             [2] " %_Green% "Ohook" %_White% "               - Kich hoat Office vinh vien (Nen dung)"
 ) else (
-echo:             [2] Ohook               - KICH HOAT OFFICE VINH VIEN
+echo:             [2] Ohook               - Kich hoat Office vinh vien (Nen dung)
 )
 if defined _tsforgego (
-call :dk_color3 %_White% "             [3] " %_Green% "TSforge" %_White% "             - Windows / Office / ESU"
+call :dk_color3 %_White% "             [3] " %_Green% "TSforge" %_White% "             - Windows / Office / ESU (Nang cao)"
 ) else (
-echo:             [3] TSforge             - KICH HOAT WINDOWS / OFFICE / ESU
+echo:             [3] TSforge             - Windows / Office / ESU (Nang cao)
 )
-echo:             [4] Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)
+echo:             [4] Online KMS          - Windows / Office (180 ngay - Tu dong gia han)
 echo:             __________________________________________________ 
 echo:
-echo:             [5] KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)
-echo:             [6] THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)
-echo:             [7] THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)
+echo:             [5] Kiem tra tinh trang ban quyen (Check Status)
+echo:             [6] Thay doi phien ban Windows (Enterprise, Pro...)
+echo:             [7] Thay doi phien ban Office (Volume, Retail...)
 echo:             __________________________________________________      
 echo:
-echo:             [8] SU CO & CHUA LOI (TROUBLESHOOT)
-echo:             [E] TIEN ICH KHAC (EXTRAS)
-echo:             [H] TRO GIUP (HELP)
-echo:             [0] THOAT (EXIT)
+echo:             [8] Sua loi va Khac phuc su co (Troubleshoot)
+echo:             [E] Cac cong cu mo rong khac (Extras)
+echo:             [H] Huong dan tro giup (Help)
+echo:             [0] Thoat (Exit)
 echo:       ______________________________________________________________
 echo:
-call :dk_color2 %_White% "         " %_Green% "Choose a menu option using your keyboard [1,2,3...E,H,0] :"
+call :dk_color2 %_White% "         " %_Green% "Nhap lua chon cua ban tu ban phim [1,2,3...E,H,0] :"
 choice /C:12345678EH0 /N
 set _erl=%errorlevel%
 
 if %_erl%==11 exit /b
 if %_erl%==10 (start %selfgit% & start %github% & start %mas%troubleshoot & goto :MainMenu)
-if %_erl%==9 goto :TIEN ICH KHAC (EXTRAS)
+if %_erl%==9 goto :CAC TIEN ICH MO RONG (EXTRAS)
 if %_erl%==8 setlocal & call :troubleshoot      & cls & endlocal & goto :MainMenu
 if %_erl%==7 setlocal & call :change_offedition & cls & endlocal & goto :MainMenu
 if %_erl%==6 setlocal & call :change_winedition & cls & endlocal & goto :MainMenu
@@ -544,10 +544,10 @@ exit /b
 
 ::========================================================================================================================================
 
-:TIEN ICH KHAC (EXTRAS)
+:CAC TIEN ICH MO RONG (EXTRAS)
 
 cls
-title  TIEN ICH KHAC (EXTRAS)
+title  CAC TIEN ICH MO RONG (EXTRAS)
 if not defined terminal mode 76, 30
 echo:
 echo:
@@ -556,22 +556,22 @@ echo:
 echo:
 echo:           ______________________________________________________
 echo:           
-echo:                [1] Extract $OEM$ Folder
+echo:                [1] Tao thu muc $OEM$ (De cai Win tu kich hoat)
 echo:                  
-echo:                [2] Download Genuine Windows / Office 
+echo:                [2] Tai Windows / Office nguyen ban tu Microsoft
 echo:                ____________________________________________      
 echo:                                                                          
-echo:                [0] Go to Main Menu
+echo:                [0] Quay lai menu chinh
 echo:           ______________________________________________________
 echo:
-call :dk_color2 %_White% "             " %_Green% "Choose a menu option using your keyboard [1,2,0] :"
+call :dk_color2 %_White% "             " %_Green% "Nhap lua chon cua ban tu ban phim [1,2,0] :"
 choice /C:120 /N
 set _erl=%errorlevel%
 
 if %_erl%==3 goto :MainMenu
-if %_erl%==2 start %mas%genuine-installation-media & goto :TIEN ICH KHAC (EXTRAS)
+if %_erl%==2 start %mas%genuine-installation-media & goto :CAC TIEN ICH MO RONG (EXTRAS)
 if %_erl%==1 goto :Extract$OEM$
-goto :TIEN ICH KHAC (EXTRAS)
+goto :CAC TIEN ICH MO RONG (EXTRAS)
 
 ::========================================================================================================================================
 
@@ -588,7 +588,7 @@ echo _____________________________________________________
 echo:
 call :dk_color %_Yellow% "Press [0] key to %_exitmsg%..."
 choice /c 0 /n
-goto :TIEN ICH KHAC (EXTRAS)
+goto :CAC TIEN ICH MO RONG (EXTRAS)
 )
 
 :Extract$OEM$2
@@ -603,24 +603,24 @@ echo:
 echo:                     Extract $OEM$ folder on the desktop           
 echo:         ____________________________________________________________
 echo:
-echo:            [1] HWID       [Windows]
-echo:            [2] Ohook      [Office]
-echo:            [3] TSforge    [Windows / ESU / Office]
-echo:            [4] Online KMS [Windows / Office]
+echo:            [1] HWID       - Windows
+echo:            [2] Ohook      - Office
+echo:            [3] TSforge    - Windows / ESU / Office
+echo:            [4] Online KMS - Windows / Office
 echo:
-echo:            [5] HWID       [Windows] ^+ Ohook [Office]
-echo:            [6] HWID       [Windows] ^+ Ohook [Office] ^+ TSforge [ESU]
-echo:            [7] TSforge    [Windows / ESU] ^+ Ohook [Office]
+echo:            [5] HWID [Win] + Ohook [Office]
+echo:            [6] HWID [Win] + Ohook [Office] + TSforge [ESU]
+echo:            [7] TSforge [Win/ESU] + Ohook [Office]
 echo:
-call :dk_color2 %_White% "            [R] " %_Green% "ReadMe"
-echo:            [0] Go Back
+call :dk_color2 %_White% "            [R] " %_Green% "Doc huong dan (ReadMe)"
+echo:            [0] Quay lai (Go Back)
 echo:         ____________________________________________________________
 echo:  
-call :dk_color2 %_White% "             " %_Green% "Choose a menu option using your keyboard :"
+call :dk_color2 %_White% "             " %_Green% "Nhap lua chon tu ban phim :"
 choice /C:1234567R0 /N
 set _erl=%errorlevel%
 
-if %_erl%==9 goto:TIEN ICH KHAC (EXTRAS)
+if %_erl%==9 goto:CAC TIEN ICH MO RONG (EXTRAS)
 if %_erl%==8 start %mas%oem-folder &goto:Extract$OEM$2
 if %_erl%==7 (set "_oem=TSforge [Windows / ESU] + Ohook [Office]" & set "para=/Z-Windows /Z-ESU /Ohook" &goto:Extract$OEM$3)
 if %_erl%==6 (set "_oem=HWID [Windows] + Ohook [Office] + TSforge [ESU]" & set "para=/HWID /Ohook /Z-ESU" &goto:Extract$OEM$3)
@@ -713,7 +713,7 @@ echo ___________________________________________________________________
 echo:
 call :dk_color %_Yellow% "Press [0] key to %_exitmsg%..."
 choice /c 0 /n
-goto TIEN ICH KHAC (EXTRAS)
+goto CAC TIEN ICH MO RONG (EXTRAS)
 
 :+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
