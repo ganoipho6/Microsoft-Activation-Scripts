@@ -23,6 +23,7 @@ Follow these steps when a new version of the upstream Microsoft-Activation-Scrip
 2. Use the **Localization Dictionary** in `MAINTENANCE_GUIDE.md` to find and replace menu strings.
 3. **CRITICAL:** Use `[]` instead of `()` for any text in `echo` commands inside code blocks to prevent syntax errors.
 4. Replace the original `dk_color3` calls for options 1, 2, and 3 with the Vietnamese versions found in `.antigravity_metadata/snippets/menu_vietnamese.cmd`.
+5. **Hide Options:** Comment out the `echo` lines for options [8], [E], and [H] to simplify the UI for end-users.
 
 ## Step 4: Verification
 1. Run the script.

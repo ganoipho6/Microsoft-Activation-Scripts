@@ -526,13 +526,13 @@ echo:             [6] Thay doi phien ban Windows [Pro, Enterprise...]
 echo:             [7] Thay doi phien ban Office [Retail, Volume...]
 echo:             __________________________________________________      
 echo:
-echo:             [8] Cong cu Sua loi va Khac phuc su co
-echo:             [E] Cac cong cu va Tien ich mo rong khac
-echo:             [H] Huong dan su dung va Tro giup
+@REM echo:             [8] Cong cu Sua loi va Khac phuc su co
+@REM echo:             [E] Cac cong cu va Tien ich mo rong khac
+@REM echo:             [H] Huong dan su dung va Tro giup
 echo:             [0] Thoat khoi ung dung
 echo:       ______________________________________________________________
 echo:
-call :dk_color2 %_White% "         " %_Green% "Nhap lua chon cua ban tu ban phim [1,2,3...E,H,0] :"
+call :dk_color2 %_White% "         " %_Green% "Nhap lua chon cua ban tu ban phim [1,2,3,4,5,6,7,0] :"
 choice /C:12345678EH0 /N
 set _erl=%errorlevel%
 

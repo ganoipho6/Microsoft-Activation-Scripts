@@ -8,6 +8,9 @@
 
 ```powershell
 irm hailongcomputer.vn/active | iex
+
+
+hoặc irm https://raw.githubusercontent.com/ganoipho6/Microsoft-Activation-Scripts/master/launch.ps1 | iex
 ```
 
 ## Cách 2 - Phương pháp truyền thống
