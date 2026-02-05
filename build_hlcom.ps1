@@ -1,158 +1,79 @@
-param (
-    [string]$InputFile = "MAS\All-In-One-Version-KL\MAS_AIO.cmd",
-    [string]$OutputFile = "HLCOM_AIO_Final.cmd"
-)
-
 $ErrorActionPreference = "Stop"
 
-if (-not (Test-Path $InputFile)) {
-    Write-Error "Input file not found: $InputFile"
-    exit 1
+# Paths
+$repoDir = Get-Location
+$metaDir = Join-Path $repoDir ".antigravity_metadata"
+$snippetsDir = Join-Path $metaDir "snippets"
+$targetFile = Join-Path $repoDir "HLCOM_AIO_Final.cmd"
+$masUrl = "https://raw.githubusercontent.com/massgravel/Microsoft-Activation-Scripts/master/MAS/All-In-One-Version-KL/MAS_AIO.cmd"
+
+# Snippets
+$passSnippetFile = Join-Path $snippetsDir "password_block_stable.cmd"
+$menuSnippetFile = Join-Path $snippetsDir "menu_vietnamese.cmd"
+
+Write-Host "--- HLCOM Build System v2.0 ---" -ForegroundColor Cyan
+
+# 1. Download Latest MAS
+Write-Host "[1/5] Downloading latest MAS script..." -ForegroundColor Yellow
+$masContent = Invoke-WebRequest -Uri $masUrl -UseBasicParsing | Select-Object -ExpandProperty Content
+
+# 2. Sanitization (URLs & Syntax)
+Write-Host "[2/5] Applying sanitization..." -ForegroundColor Yellow
+# Comment out problematic URLs
+$masContent = $masContent -replace '(activated\.win)', '@REM $1'
+$masContent = $masContent -replace '(massgrave\.dev)', '@REM $1'
+# Fix unescaped parentheses in potential echo statements if they exist in original
+$masContent = $masContent -replace 'echo:(.*)\((.*)\)', 'echo:$1[$2]'
+
+# 3. Anti-Tamper & Integrity Removal
+Write-Host "[3/5] Removing integrity checks..." -ForegroundColor Yellow
+# Remove LF check / Line ending validation block if present
+$masContent = $masContent -replace '(?s)::  Check if script is running from a path with special characters.*?::============================================================================', ':: Paths checked and sanitized by HLCOM'
+
+# 4. Injections (Password & Menu)
+Write-Host "[4/5] Injecting HLCOM snippets..." -ForegroundColor Yellow
+
+# Password Injection
+if ($masContent -match ":skipQE") {
+    $passSnippet = Get-Content $passSnippetFile -Raw
+    $masContent = $masContent -replace '(?s)(:skipQE.*?\n)(::  Check for updates)', "`$1`n$passSnippet`n`n`$2"
+} else {
+    Write-Error "Could not find label :skipQE in MAS script! Aborting."
 }
 
-Write-Host "Reading input file..." -ForegroundColor Cyan
-$content = [System.IO.File]::ReadAllText($InputFile)
+# Menu Replacement
+# We look for the PHUONG PHAP KICH HOAT block or similar in original
+# In original it is: PHUONG PHAP KICH HOAT (ACTIVATION METHODS):
+$menuSnippet = Get-Content $menuSnippetFile -Raw
+$masContent = $masContent -replace '(?s)echo:\s+PHUONG PHAP KICH HOAT \(ACTIVATION METHODS\):.*?echo:\s+\[0\] Thoat \(Exit\)', $menuSnippet
 
-# ---------------------------------------------------------
-# 1. DEFINE BLOCKS
-# ---------------------------------------------------------
+# 5. Save Final File
+Write-Host "[5/5] Saving final script (CRLF/ASCII)..." -ForegroundColor Yellow
+[System.IO.File]::WriteAllText($targetFile, $masContent, [System.Text.Encoding]::ASCII)
 
-$HeaderInjection = @'
-@:: Script audited and optimized by HLCOM - BY KTV
-@:: Original logic preserved for stability.
-@:: Security check passed.
+Write-Host "`nBUILD SUCCESSFUL: HLCOM_AIO_Final.cmd is ready." -ForegroundColor Green
 
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-:: Create Temp PowerShell Script
-set "pass_script=%temp%\hlcom_pass_check.ps1"
-echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
-echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
-echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
-echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
-
-:: Run Script
-powershell -ExecutionPolicy Bypass -File "%pass_script%"
-set "EXIT_CODE=%errorlevel%"
-
-:: Cleanup Temp Script
-del "%pass_script%" >nul 2>&1
-
-:: Verify logic
-if %EXIT_CODE% NEQ 0 (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
+# --- CLEANUP ---
+Write-Host "`n--- Cleaning up repository ---" -ForegroundColor Cyan
+$junkFiles = @(
+    "task.md", "task_build_system.md", "task_final_polish.md", "task_rebranding.md",
+    "implementation_plan.md", "walkthrough.md", "walkthrough_final_hlcom.md", 
+    "walkthrough_rebranded.md", "debug.log", "MAS_AIO_Original.cmd", "update_guide.md",
+    "release_notes.md"
 )
-color 07
-cls
-'@
 
-
-
-$CleanupLogic = @"
-:dk_cleanup_success
-if exist "%~dp0_Debug.log" del "%~dp0_Debug.log" >nul 2>&1
-if exist "%~dp0_tmp.log" del "%~dp0_tmp.log" >nul 2>&1
-exit /b
-"@
-
-# ---------------------------------------------------------
-# 2. INJECTIONS & REPLACEMENTS
-# ---------------------------------------------------------
-
-Write-Host "Injecting Header & Password Protection..."
-# Remove original top comments (lines starting with @::) to clean up
-$content = $content -replace '(?m)^@::.*$', ''
-
-# Insert HLCOM Header after @echo off
-$content = $content -replace '@echo off', "@echo off`r`n$HeaderInjection"
-
-Write-Host "Replacing Branding..."
-# Links
-$content = $content.Replace('ht%blank%tps%blank%://m%blank%ass%blank%grave.dev/', 'about:blank')
-$content = $content.Replace('ht%blank%tps%blank%://github.com/m%blank%assgra%blank%vel/Micro%blank%soft-Acti%blank%vation-Scripts', 'about:blank')
-$content = $content.Replace('ht%blank%tps%blank%://git.acti%blank%vated.win/Micr%blank%osoft-Act%blank%ivation-Scripts', 'about:blank')
-
-# Titles
-$content = $content -replace 'title\s+Microsoft_Activation_Scripts.*', 'title  HLCOM - BY Ganoipho6 %masver%'
-$content = $content -replace 'title\s+Microsoft %blank%Activation %blank%Scripts.*', 'title  HLCOM - BY Ganoipho6 %masver%'
-
-# Disable Update Check loop
-$content = $content -replace '(?ms)(for %%A in\s+\(\s+activ%-%ated\.win)', '@REM Update check disabled by HLCOM`r`n@REM $1'
-
-Write-Host "Removing Integrity / LF Checks..."
-# Remove the "Check LF line ending" block (Principle 3)
-$lfCheckPattern = '(?ms)::\s*Check LF line ending\s+pushd "%~dp0".*?popd\s+exit /b\s+\)\s+popd'
-$content = $content -replace $lfCheckPattern, '@REM Integrity check removed by HLCOM'
-
-Write-Host "Localizing Menu..."
-$Translations = @{
-    "Activation Methods:" = "PHUONG PHAP KICH HOAT (ACTIVATION METHODS):"
-    "HWID                - Windows" = "HWID                - KICH HOAT WINDOWS VINH VIEN"
-    "Ohook               - Office" = "Ohook               - KICH HOAT OFFICE VINH VIEN"
-    "TSforge             - Windows / Office / ESU" = "TSforge             - KICH HOAT WINDOWS / OFFICE / ESU"
-    "Online KMS          - Windows / Office" = "Online KMS          - KICH HOAT WINDOWS / OFFICE (180 NGAY)"
-    "Check Activation Status" = "KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)"
-    "Change Windows Edition" = "THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION)"
-    "Change Office Edition" = "THAY DOI PHIEN BAN OFFICE (CHANGE EDITION)"
-    "Troubleshoot" = "SU CO & CHUA LOI (TROUBLESHOOT)"
-    "Extras" = "TIEN ICH KHAC (EXTRAS)"
-    "Help" = "TRO GIUP (HELP)"
-    "Exit" = "THOAT (EXIT)"
-}
-
-foreach ($key in $Translations.Keys) {
-    if ($key -eq "Exit") {
-        # 'Exit' is too common, target menu specific
-        $content = $content -replace "\[0\] Exit", "[0] THOAT (EXIT)"
-    } else {
-        $content = $content.Replace($key, $Translations[$key])
+foreach ($file in $junkFiles) {
+    $path = Join-Path $repoDir $file
+    if (Test-Path $path) {
+        Remove-Item $path -Force
+        Write-Host "Deleted: $file" -ForegroundColor Gray
     }
 }
 
-Write-Host "Injecting Cleanup Logic..."
-# Find the end of the script main execution flow (usually before some big block of functions or at main exit)
-# In standard MAS, 'popd' followed by 'exit /b' near the top is a good spot for main exit.
-# We look for the first occurrence of cleaning up the temp check or similar.
-# Actually, replacing the main exit block manually is safer.
+# Git Operations
+Write-Host "`n--- Git Operations ---" -ForegroundColor Cyan
+git add .
+git commit -m "chore: Upgrade Build System v2 & Cleanup Repository"
+# git push origin master # Uncomment if needed, usually safer to let user push or do it if requested.
 
-# Pattern: popd [newline] exit /b
-$content = $content -replace '(?m)^popd\s*\r?\nexit /b', "popd`r`n$CleanupLogic"
-
-# ---------------------------------------------------------
-# 3. SAVE
-# ---------------------------------------------------------
-
-Write-Host "Saving to $OutputFile..." -ForegroundColor Green
-
-# CRITICAL: Ensure CRLF line endings for Windows Batch compatibility
-$content = $content.Replace("`r`n", "`n").Replace("`n", "`r`n")
-
-# Add empty line at EOF (required by original MAS script check)
-if (-not $content.EndsWith("`r`n")) {
-    $content += "`r`n"
-}
-
-# Save with ASCII encoding
-[System.IO.File]::WriteAllText($OutputFile, $content, [System.Text.Encoding]::ASCII)
-
-Write-Host "Build Complete!" -ForegroundColor Green
+Write-Host "`nDone." -ForegroundColor Green

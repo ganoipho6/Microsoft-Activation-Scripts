@@ -1,57 +1,11 @@
-
-
-
-
-
+@::Please stop false-flagging this script over and over. This is the 3rd time I've had to update the script to deal with the false positives.
+@::Nothing in this script is malicious and it is used by thousands of people *daily*.
+@::Is a real person even the one deciding to flag this or is it Copilot told to flag anything it decides not to like?
+@::If a campaign is using this script as a cover, please flag parts of the campaign instead of the script. This isn't the first time we experienced collateral damage due to campaigns completely unrelated to us.
+@::If you disagree that MAS is not malicious, we would appreciate if you contacted us to explain what constitutes MAS as "Sonbokli" and we'll look into it. Thank you. 
 @set masver=3.10
 @setlocal DisableDelayedExpansion
 @echo off
-@:: Script audited and optimized by HLCOM - BY KTV
-@:: Original logic preserved for stability.
-@:: Security check passed.
-
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-:: Create Temp PowerShell Script
-set "pass_script=%temp%\hlcom_pass_check.ps1"
-echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
-echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
-echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
-echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
-
-:: Run Script
-powershell -ExecutionPolicy Bypass -File "%pass_script%"
-set "EXIT_CODE=%errorlevel%"
-
-:: Cleanup Temp Script
-del "%pass_script%" >nul 2>&1
-
-:: Verify logic
-if %EXIT_CODE% NEQ 0 (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
-)
-color 07
-cls
 
 
 
@@ -116,9 +70,9 @@ exit /b
 ::========================================================================================================================================
 
 set "blank="
-set "mas=about:blank"
-set "github=about:blank"
-set "selfgit=about:blank"
+set "mas=ht%blank%tps%blank%://m%blank%ass%blank%grave.dev/"
+set "github=ht%blank%tps%blank%://github.com/m%blank%assgra%blank%vel/Micro%blank%soft-Acti%blank%vation-Scripts"
+set "selfgit=ht%blank%tps%blank%://git.acti%blank%vated.win/Micr%blank%osoft-Act%blank%ivation-Scripts"
 
 ::  Check if Null service is working, it's important for the batch script
 
@@ -135,13 +89,28 @@ ping 127.0.0.1 -n 20
 )
 cls
 
-@REM Integrity check removed by HLCOM
+::  Check LF line ending
+
+pushd "%~dp0"
+>nul findstr /v "$" "%~nx0" && (
+echo:
+echo Error - Script either has LF line ending issue or an empty line at the end of the script is missing.
+echo:
+echo:
+echo Check this webpage for help - %mas%troubleshoot
+echo:
+echo:
+ping 127.0.0.1 -n 20 >nul
+popd
+exit /b
+)
+popd
 
 ::========================================================================================================================================
 
 cls
 color 07
-title  HLCOM - BY Ganoipho6 %masver%
+title  Microsoft_Activation_Scripts %masver%
 
 set _args=
 set _elev=
@@ -374,6 +343,52 @@ exit /b
 
 ::========================================================================================================================================
 
+
+:CheckPassword
+cls
+echo.
+echo   _   _  _      _____  ____  __  __ 
+echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
+echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
+echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
+echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
+echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
+echo              BY GANOIPHO6
+echo.
+echo ============================================================
+echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
+echo ============================================================
+echo.
+echo [INFO] Checking password... >> "%_logfile%"
+:: Create Temp PowerShell Script
+set "pass_script=%temp%\hlcom_pass_check.ps1"
+echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
+echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
+echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
+echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
+
+:: Run Script
+powershell -ExecutionPolicy Bypass -File "%pass_script%"
+set "EXIT_CODE=%errorlevel%"
+
+:: Cleanup Temp Script
+del "%pass_script%" >nul 2>&1
+
+:: Verify logic
+if %EXIT_CODE% NEQ 0 (
+    color 0C
+    echo.
+    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
+    echo.
+    echo [ERROR] Password failed >> "%_logfile%"
+    pause
+    exit
+)
+echo [INFO] Password verified >> "%_logfile%"
+color 07
+cls
+
+
 ::  Check for updates
 
 set -=
@@ -381,7 +396,7 @@ set old=
 set pingp=
 set upver=%masver:.=%
 
-@REM Update check disabled by HLCOM`r`n@REM for %%A in (
+for %%A in (
 activ%-%ated.win
 mass%-%grave.dev
 ) do if not defined pingp (
@@ -451,7 +466,7 @@ goto dk_done
 
 cls
 color 07
-title  HLCOM - BY Ganoipho6 %masver%
+title  Microsoft %blank%Activation %blank%Scripts %masver%
 if not defined terminal mode 76, 34
 
 if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-Server*Edition~*.mum" set _serexist=1
@@ -485,44 +500,44 @@ echo:
 echo:
 echo:       ______________________________________________________________
 echo:
-echo:                 PHUONG PHAP KICH HOAT (ACTIVATION METHODS):
+echo:                 Activation Methods:
 echo:
 if defined _hwidgo (
-call :dk_color3 %_White% "             [1] " %_Green% "HWID" %_White% "                - Kich hoat Windows vinh vien (Nen dung)"
+call :dk_color3 %_White% "             [1] " %_Green% "HWID" %_White% "                - Windows"
 ) else (
-echo:             [1] HWID                - Kich hoat Windows vinh vien (Nen dung)
+echo:             [1] HWID                - Windows
 )
 if defined _ohookgo (
-call :dk_color3 %_White% "             [2] " %_Green% "Ohook" %_White% "               - Kich hoat Office vinh vien (Nen dung)"
+call :dk_color3 %_White% "             [2] " %_Green% "Ohook" %_White% "               - Office"
 ) else (
-echo:             [2] Ohook               - Kich hoat Office vinh vien (Nen dung)
+echo:             [2] Ohook               - Office
 )
 if defined _tsforgego (
-call :dk_color3 %_White% "             [3] " %_Green% "TSforge" %_White% "             - Windows / Office / ESU (Nang cao)"
+call :dk_color3 %_White% "             [3] " %_Green% "TSforge" %_White% "             - Windows / Office / ESU"
 ) else (
-echo:             [3] TSforge             - Windows / Office / ESU (Nang cao)
+echo:             [3] TSforge             - Windows / Office / ESU
 )
-echo:             [4] Online KMS          - Windows / Office (180 ngay - Tu dong gia han)
+echo:             [4] Online KMS          - Windows / Office
 echo:             __________________________________________________ 
 echo:
-echo:             [5] Kiem tra tinh trang ban quyen (Check Status)
-echo:             [6] Thay doi phien ban Windows (Enterprise, Pro...)
-echo:             [7] Thay doi phien ban Office (Volume, Retail...)
+echo:             [5] Check Activation Status
+echo:             [6] Change Windows Edition
+echo:             [7] Change Office Edition
 echo:             __________________________________________________      
 echo:
-echo:             [8] Sua loi va Khac phuc su co (Troubleshoot)
-echo:             [E] Cac cong cu mo rong khac (Extras)
-echo:             [H] Huong dan tro giup (Help)
-echo:             [0] Thoat (Exit)
+echo:             [8] Troubleshoot
+echo:             [E] Extras
+echo:             [H] Help
+echo:             [0] Exit
 echo:       ______________________________________________________________
 echo:
-call :dk_color2 %_White% "         " %_Green% "Nhap lua chon cua ban tu ban phim [1,2,3...E,H,0] :"
+call :dk_color2 %_White% "         " %_Green% "Choose a menu option using your keyboard [1,2,3...E,H,0] :"
 choice /C:12345678EH0 /N
 set _erl=%errorlevel%
 
 if %_erl%==11 exit /b
 if %_erl%==10 (start %selfgit% & start %github% & start %mas%troubleshoot & goto :MainMenu)
-if %_erl%==9 goto :CAC TIEN ICH MO RONG (EXTRAS)
+if %_erl%==9 goto :Extras
 if %_erl%==8 setlocal & call :troubleshoot      & cls & endlocal & goto :MainMenu
 if %_erl%==7 setlocal & call :change_offedition & cls & endlocal & goto :MainMenu
 if %_erl%==6 setlocal & call :change_winedition & cls & endlocal & goto :MainMenu
@@ -544,10 +559,10 @@ exit /b
 
 ::========================================================================================================================================
 
-:CAC TIEN ICH MO RONG (EXTRAS)
+:Extras
 
 cls
-title  CAC TIEN ICH MO RONG (EXTRAS)
+title  Extras
 if not defined terminal mode 76, 30
 echo:
 echo:
@@ -556,22 +571,22 @@ echo:
 echo:
 echo:           ______________________________________________________
 echo:           
-echo:                [1] Tao thu muc $OEM$ (De cai Win tu kich hoat)
+echo:                [1] Extract $OEM$ Folder
 echo:                  
-echo:                [2] Tai Windows / Office nguyen ban tu Microsoft
+echo:                [2] Download Genuine Windows / Office 
 echo:                ____________________________________________      
 echo:                                                                          
-echo:                [0] Quay lai menu chinh
+echo:                [0] Go to Main Menu
 echo:           ______________________________________________________
 echo:
-call :dk_color2 %_White% "             " %_Green% "Nhap lua chon cua ban tu ban phim [1,2,0] :"
+call :dk_color2 %_White% "             " %_Green% "Choose a menu option using your keyboard [1,2,0] :"
 choice /C:120 /N
 set _erl=%errorlevel%
 
 if %_erl%==3 goto :MainMenu
-if %_erl%==2 start %mas%genuine-installation-media & goto :CAC TIEN ICH MO RONG (EXTRAS)
+if %_erl%==2 start %mas%genuine-installation-media & goto :Extras
 if %_erl%==1 goto :Extract$OEM$
-goto :CAC TIEN ICH MO RONG (EXTRAS)
+goto :Extras
 
 ::========================================================================================================================================
 
@@ -588,7 +603,7 @@ echo _____________________________________________________
 echo:
 call :dk_color %_Yellow% "Press [0] key to %_exitmsg%..."
 choice /c 0 /n
-goto :CAC TIEN ICH MO RONG (EXTRAS)
+goto :Extras
 )
 
 :Extract$OEM$2
@@ -603,24 +618,24 @@ echo:
 echo:                     Extract $OEM$ folder on the desktop           
 echo:         ____________________________________________________________
 echo:
-echo:            [1] HWID       - Windows
-echo:            [2] Ohook      - Office
-echo:            [3] TSforge    - Windows / ESU / Office
-echo:            [4] Online KMS - Windows / Office
+echo:            [1] HWID       [Windows]
+echo:            [2] Ohook      [Office]
+echo:            [3] TSforge    [Windows / ESU / Office]
+echo:            [4] Online KMS [Windows / Office]
 echo:
-echo:            [5] HWID [Win] + Ohook [Office]
-echo:            [6] HWID [Win] + Ohook [Office] + TSforge [ESU]
-echo:            [7] TSforge [Win/ESU] + Ohook [Office]
+echo:            [5] HWID       [Windows] ^+ Ohook [Office]
+echo:            [6] HWID       [Windows] ^+ Ohook [Office] ^+ TSforge [ESU]
+echo:            [7] TSforge    [Windows / ESU] ^+ Ohook [Office]
 echo:
-call :dk_color2 %_White% "            [R] " %_Green% "Doc huong dan (ReadMe)"
-echo:            [0] Quay lai (Go Back)
+call :dk_color2 %_White% "            [R] " %_Green% "ReadMe"
+echo:            [0] Go Back
 echo:         ____________________________________________________________
 echo:  
-call :dk_color2 %_White% "             " %_Green% "Nhap lua chon tu ban phim :"
+call :dk_color2 %_White% "             " %_Green% "Choose a menu option using your keyboard :"
 choice /C:1234567R0 /N
 set _erl=%errorlevel%
 
-if %_erl%==9 goto:CAC TIEN ICH MO RONG (EXTRAS)
+if %_erl%==9 goto:Extras
 if %_erl%==8 start %mas%oem-folder &goto:Extract$OEM$2
 if %_erl%==7 (set "_oem=TSforge [Windows / ESU] + Ohook [Office]" & set "para=/Z-Windows /Z-ESU /Ohook" &goto:Extract$OEM$3)
 if %_erl%==6 (set "_oem=HWID [Windows] + Ohook [Office] + TSforge [ESU]" & set "para=/HWID /Ohook /Z-ESU" &goto:Extract$OEM$3)
@@ -644,52 +659,6 @@ md "!_dir!\"
 
 (
 echo @echo off
-@:: Script audited and optimized by HLCOM - BY KTV
-@:: Original logic preserved for stability.
-@:: Security check passed.
-
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-:: Create Temp PowerShell Script
-set "pass_script=%temp%\hlcom_pass_check.ps1"
-echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
-echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
-echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
-echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
-
-:: Run Script
-powershell -ExecutionPolicy Bypass -File "%pass_script%"
-set "EXIT_CODE=%errorlevel%"
-
-:: Cleanup Temp Script
-del "%pass_script%" >nul 2>&1
-
-:: Verify logic
-if %EXIT_CODE% NEQ 0 (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
-)
-color 07
-cls
 echo fltmc ^>nul ^|^| exit /b
 echo call "%%~dp0MAS_AIO.cmd" %para%
 echo cd \
@@ -713,7 +682,7 @@ echo ___________________________________________________________________
 echo:
 call :dk_color %_Yellow% "Press [0] key to %_exitmsg%..."
 choice /c 0 /n
-goto CAC TIEN ICH MO RONG (EXTRAS)
+goto Extras
 
 :+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -790,7 +759,7 @@ if not exist %SysPath%\%%# (
 echo [%SysPath%\%%#] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -1274,10 +1243,10 @@ set "nceline=echo: &echo ==== ERROR ==== &echo:"
 set "eline=echo: &call :dk_color %Red% "==== ERROR ====" &echo:"
 if %~z0 GEQ 200000 (
 set "_exitmsg=Go back"
-set "_fixmsg=Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix Licensing option."
+set "_fixmsg=Go back to Main Menu, select Troubleshoot and run Fix Licensing option."
 ) else (
 set "_exitmsg=Exit"
-set "_fixmsg=In MAS folder, run SU CO & CHUA LOI (TROUBLESHOOT) script and select Fix Licensing option."
+set "_fixmsg=In MAS folder, run Troubleshoot script and select Fix Licensing option."
 )
 exit /b
 
@@ -1530,7 +1499,7 @@ if %spperror% NEQ 1056 if %spperror% NEQ 0 (
 echo sc start %_slser% [Error Code: %spperror%]
 if %spperror% EQU 1053 (
 call :dk_color %Blue% "Reboot your machine using the restart option and try again."
-call :dk_color %Blue% "If it still does not work, go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "If it still does not work, go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
 )
 )
 
@@ -1848,7 +1817,7 @@ if defined wmifailed (
 call :dk_color %Red% "Checking WMI                            [Not Working]"
 
 if not defined showfix (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix WMI option."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WMI option."
 echo:
 )
 set error=1
@@ -1977,7 +1946,7 @@ if defined chkalp (
 call :dk_color %Red% "Checking WPA Registry Errors            [%wpainfo%]"
 if not defined showfix (
 echo "%wpainfo%" | find /i "Error Found" %nul% && (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
 echo:
 set error=1
 set showfix=1
@@ -1990,7 +1959,7 @@ if not defined chkalp (
 if %wpainfo% GEQ 5000 (
 call :dk_color %Gray% "Checking WPA Registry Count             [%wpainfo%]"
 call :dk_color %Blue% "A large number of WPA registries have been found, which may cause high CPU usage."
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run Fix WPA Registry option."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run Fix WPA Registry option."
 echo:
 ) else (
 echo Checking WPA Registry Count             [%wpainfo%]
@@ -2618,7 +2587,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -2933,7 +2902,7 @@ echo:
 if not defined error (
 call :dk_color %Green% "Office is permanently activated."
 if defined ohub call :dk_color %Gray% "Office apps such as Word, Excel are activated, use them directly. Ignore 'Buy' button in Office dashboard app."
-echo TRO GIUP (HELP): %mas%troubleshoot
+echo Help: %mas%troubleshoot
 ) else (
 call :dk_color %Red% "Some errors were detected."
 if not defined ierror if not defined showfix call :dk_color %Blue% "%_fixmsg%"
@@ -4602,7 +4571,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -5191,7 +5160,7 @@ if %winbuild% EQU 19045 if not defined w10EsuEditionsLaterAdded (
 call :dk_color %Blue% "To get latest version, go to Windows settings and run Windows Update. After that, try the script again."
 goto :ts_off
 )
-call :dk_color %Blue% "Go back to Main Menu, select THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION) option and change to any of the below listed editions."
+call :dk_color %Blue% "Go back to Main Menu, select Change Windows Edition option and change to any of the below listed editions."
 echo [%esueditionlist%]
 goto :ts_off
 )
@@ -5966,7 +5935,7 @@ if exist %SysPath%\ClipESU.exe (%SysPath%\ClipESU.exe %nul%)
 )
 )
 
-if defined esuexistsup echo TRO GIUP (HELP): %mas%tsforge#windows-esu
+if defined esuexistsup echo Help: %mas%tsforge#windows-esu
 
 if %_actwin%==1 for %%# in (407) do if %osSKU%==%%# (
 call :dk_color %Red% "%winos% does not support activation on non-azure platforms."
@@ -6280,7 +6249,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Xml.Linq;
 
-    public static class ActivationTRO GIUP (HELP)er {
+    public static class ActivationHelper {
         // Key for HMAC/SHA256 signature.
         private static readonly byte[] MacKey = new byte[64] {
             254,  49, 152, 117, 251,  72, 132, 134,
@@ -8320,7 +8289,7 @@ namespace LibTSforge.Crypto
 
             byte[] rsaKey = production ? Keys.PRODUCTION : Keys.TEST;
 
-            byte[] aesKey = Encoding.UTF8.GetBytes("massgrave.dev :3");
+            byte[] aesKey = Encoding.UTF8.GetBytes("@REM massgrave.dev :3");
             byte[] hmacKey = CryptoUtils.GenerateRandomKey(0x10);
 
             byte[] encAesKey = CryptoUtils.RSAEncrypt(rsaKey, aesKey);
@@ -9177,7 +9146,7 @@ namespace LibTSforge.Activators
                         {
                             DataType = CRCBlockType.STRING,
                             Key = new byte[] { },
-                            ValueAsStr = "massgrave.dev"
+                            ValueAsStr = "@REM massgrave.dev"
                         },
                         new CRCBlockModern
                         {
@@ -11421,7 +11390,7 @@ if (-not $env:resetstuff) {
                 foreach ($params in $attempts) {
                     [LibTSforge.Modifiers.SetIIDParams]::SetParams($ver, $prod, $tsactid, [LibTSforge.SPP.PKeyAlgorithm]::PKEY2009, $params[0], $params[1], $params[2])
                     $instId = [LibTSforge.SPP.SLApi]::GetInstallationID($tsactid)
-                    $confId = [ActivationWs.ActivationTRO GIUP (HELP)er]::CallWebService(1, $instId, "31337-42069-123-456789-04-1337-2600.0000-2542001")
+                    $confId = [ActivationWs.ActivationHelper]::CallWebService(1, $instId, "31337-42069-123-456789-04-1337-2600.0000-2542001")
                     $result = [LibTSforge.SPP.SLApi]::DepositConfirmationID($tsactid, $instId, $confId)
                     if ($result -eq 0) { break }
                 }
@@ -12273,7 +12242,7 @@ if not exist %SysPath%\%_slexe% (
 echo [%SysPath%\%_slexe%] file is missing, aborting...
 echo:
 if not defined results (
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -13109,52 +13078,6 @@ exit /b
 
 :_extracttask:
 @echo off
-@:: Script audited and optimized by HLCOM - BY KTV
-@:: Original logic preserved for stability.
-@:: Security check passed.
-
-::  HLCOM Banner & Security Check
-color 0B
-echo.
-echo   _   _  _      _____  ____  __  __ 
-echo  ^| ^| ^| ^|^| ^|    / ____^|/ __ \^|  \/  ^|
-echo  ^| ^|_^| ^|^| ^|   ^| ^|    ^| ^|  ^| ^| \  / ^|
-echo  ^|  _  ^|^| ^|   ^| ^|    ^| ^|  ^| ^| ^|\/^| ^|
-echo  ^| ^| ^| ^|^| ^|___^| ^|____^| ^|__^| ^| ^|  ^| ^|
-echo  ^|_^| ^|_^|^|______\_____\____/^|_^|  ^|_^|
-echo              BY GANOIPHO6
-echo.
-echo ============================================================
-echo   HE THONG KICH HOAT BAN QUYEN CAO CAP - PHIEN BAN NOI BO
-echo ============================================================
-echo.
-
-:CheckPassword
-:: Create Temp PowerShell Script
-set "pass_script=%temp%\hlcom_pass_check.ps1"
-echo $p = Read-Host -Prompt 'NHAP MAT KHAU' -AsSecureString; > "%pass_script%"
-echo $BSTR=[System.Runtime.InteropServices.Marshal]::SecureStringToBSTR($p); >> "%pass_script%"
-echo $plain=[System.Runtime.InteropServices.Marshal]::PtrToStringBSTR($BSTR); >> "%pass_script%"
-echo if ($plain -eq 'toiyeuhailongcomputer') { exit 0 } else { exit 1 } >> "%pass_script%"
-
-:: Run Script
-powershell -ExecutionPolicy Bypass -File "%pass_script%"
-set "EXIT_CODE=%errorlevel%"
-
-:: Cleanup Temp Script
-del "%pass_script%" >nul 2>&1
-
-:: Verify logic
-if %EXIT_CODE% NEQ 0 (
-    color 0C
-    echo.
-    echo [!] MAT KHAU SAI! HE THONG SE TU DONG KHOA LAI.
-    echo.
-    pause
-    exit
-)
-color 07
-cls
 
 ::   Renew K-M-S activation with Online servers via scheduled task
 
@@ -13346,7 +13269,7 @@ for /f "tokens=1 delims=-_" %%a in ("%prodname%") do set "prodname=%%a"
 set _taskskip=
 if "%_actprojvis%"=="1" (
 echo: %prodname% | find /i "Office" %nul% && (
-echo: %prodname% | findstr /i "Project Visio" %nul% || (set _taskskip=1& exit /b)
+echo: %prodname% | findstr /i "Project Visio" %nul% || [set _taskskip=1& exit /b]
 )
 )
 
@@ -15968,7 +15891,7 @@ function ClcRun
 }
 #endregion
 
-$Host.UI.RawUI.WindowTitle = "KIEM TRA TRANG THAI KICH HOAT (CHECK STATUS)"
+$Host.UI.RawUI.WindowTitle = "Check Activation Status"
 if ($All.IsPresent) {
 	$B=$Host.UI.RawUI.BufferSize;$B.Height=3000;$Host.UI.RawUI.BufferSize=$B;
 	if (!$Pass.IsPresent) {clear;}
@@ -16139,7 +16062,7 @@ set "line=______________________________________________________________________
 :at_menu
 
 cls
-title  SU CO & CHUA LOI (TROUBLESHOOT) %masver%
+title  Troubleshoot %masver%
 if not defined terminal mode 77, 30
 
 echo:
@@ -16148,7 +16071,7 @@ echo:
 echo:
 echo:       _______________________________________________________________
 echo:                                                   
-call :dk_color2 %_White% "             [1] " %_Green% "TRO GIUP (HELP)"
+call :dk_color2 %_White% "             [1] " %_Green% "Help"
 echo:             ___________________________________________________
 echo:                                                                      
 echo:             [2] Dism RestoreHealth
@@ -17309,7 +17232,7 @@ set "line=echo _________________________________________________________________
 
 cls
 if not defined terminal mode 98, 30
-title  THAY DOI PHIEN BAN WINDOWS (CHANGE EDITION) %masver%
+title  Change Windows Edition %masver%
 
 if %winbuild% LSS 7600 (
 %eline%
@@ -17329,7 +17252,7 @@ dism.exe
 if not exist %SysPath%\%%# (
 %eline%
 echo [%SysPath%\%%#] file is missing, aborting...
-call :dk_color %Blue% "Go back to Main Menu, select SU CO & CHUA LOI (TROUBLESHOOT) and run DISM Restore and SFC Scan options."
+call :dk_color %Blue% "Go back to Main Menu, select Troubleshoot and run DISM Restore and SFC Scan options."
 call :dk_color %Blue% "After that, restart system and try activation again."
 set fixes=%fixes% %mas%in-place_repair_upgrade
 call :dk_color2 %Blue% "If it still shows the same error, do this - " %_Yellow% " %mas%in-place_repair_upgrade"
@@ -17963,7 +17886,7 @@ function Write-UpgradeXml {
 }
 
 function Write-Usage {
-    Get-TRO GIUP (HELP) $script:MyInvocation.MyCommand.Path -detailed
+    Get-Help $script:MyInvocation.MyCommand.Path -detailed
 }
 
 $version = '1.0'
@@ -18171,7 +18094,7 @@ set "line=echo _________________________________________________________________
 
 cls
 if not defined terminal mode 98, 30
-title  THAY DOI PHIEN BAN OFFICE (CHANGE EDITION) %masver%
+title  Change Office Edition %masver%
 
 if %winbuild% LSS 7600 (
 %eline%
@@ -18310,7 +18233,7 @@ goto dk_done
 cls
 set fixes=
 if not defined terminal mode 76, 25
-title  THAY DOI PHIEN BAN OFFICE (CHANGE EDITION) %masver%
+title  Change Office Edition %masver%
 echo:
 echo:
 echo:
