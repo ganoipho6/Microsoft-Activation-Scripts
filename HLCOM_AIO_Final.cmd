@@ -531,10 +531,9 @@ echo:             [8] Cong cu Sua loi va Khac phuc su co
 echo:             [E] Cac cong cu va Tien ich mo rong khac
 echo:             [H] Huong dan su dung va Tro giup
 echo:             [0] Thoat khoi ung dung
-
 echo:       ______________________________________________________________
 echo:
-call :dk_color2 %_White% "         " %_Green% "Choose a menu option using your keyboard [1,2,3...E,H,0] :"
+call :dk_color2 %_White% "         " %_Green% "Nhap lua chon cua ban tu ban phim [1,2,3...E,H,0] :"
 choice /C:12345678EH0 /N
 set _erl=%errorlevel%
 

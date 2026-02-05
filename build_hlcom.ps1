@@ -46,7 +46,7 @@ if ($masContent -match ":skipQE") {
 # Menu Replacement
 # Detecting the official English menu block
 $menuSnippet = Get-Content $menuSnippetFile -Raw
-$menuRegex = '(?s)echo:\s+Activation Methods:.*?echo:\s+\[0\] Exit'
+$menuRegex = '(?s)echo:\s+Activation Methods:.*?call :dk_color2.*?Choose a menu option.*?\r?\n'
 if ($masContent -match $menuRegex) {
     $masContent = $masContent -replace $menuRegex, $menuSnippet
 } else {
