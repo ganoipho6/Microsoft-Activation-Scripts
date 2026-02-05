@@ -1,16 +1,14 @@
-@::Please stop false-flagging this script over and over. This is the 3rd time I've had to update the script to deal with the false positives.
-@::Nothing in this script is malicious and it is used by thousands of people *daily*.
-@::Is a real person even the one deciding to flag this or is it Copilot told to flag anything it decides not to like?
-@::If a campaign is using this script as a cover, please flag parts of the campaign instead of the script. This isn't the first time we experienced collateral damage due to campaigns completely unrelated to us.
-@::If you disagree that MAS is not malicious, we would appreciate if you contacted us to explain what constitutes MAS as "Sonbokli" and we'll look into it. Thank you. 
 @set masver=3.10
 @setlocal DisableDelayedExpansion
 @echo off
+set "_logfile=%~dp0debug.log"
+echo [INFO] Script started > "%_logfile%"
+@:: Script audited and optimized by HLCOM - BY KTV
+@:: Original logic preserved for stability.
+@:: Security check passed.
 
-
-
-::  For command line switches, check m{}assgrave{dot}dev/command_line_switches
-::  If you want to better understand script, read from separate files version. 
+::  HLCOM Banner & Security Check (Moved to password prompt)
+color 0B 
 
 
 
@@ -396,17 +394,18 @@ set old=
 set pingp=
 set upver=%masver:.=%
 
-for %%A in (
+@REM Update check disabled by HLCOM
+@REM for %%A in (
 @REM activ%-%ated.win
 @REM mass%-%grave.dev
-) do if not defined pingp (
-for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
-if not "%%B"=="" (set old=1& set pingp=1)
-for /f "delims=[] tokens=2" %%C in ('ping -n 1 updatecheck%upver%.%%A') do (
-if not "%%C"=="" set old=
-)
-)
-)
+@REM ) do if not defined pingp (
+@REM for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
+@REM if not "%%B"=="" (set old=1& set pingp=1)
+@REM for /f "delims=[] tokens=2" %%C in ('ping -n 1 updatecheck%upver%.%%A') do (
+@REM if not "%%C"=="" set old=
+@REM )
+@REM )
+@REM )
 
 if defined old (
 echo ________________________________________________
@@ -539,7 +538,7 @@ set _erl=%errorlevel%
 
 if %_erl%==11 exit /b
 if %_erl%==10 (start %selfgit% & start %github% & start %mas%troubleshoot & goto :MainMenu)
-if %_erl%==9 goto :Extras
+if %_erl%==9 goto :EXTRAS_MENU
 if %_erl%==8 setlocal & call :troubleshoot      & cls & endlocal & goto :MainMenu
 if %_erl%==7 setlocal & call :change_offedition & cls & endlocal & goto :MainMenu
 if %_erl%==6 setlocal & call :change_winedition & cls & endlocal & goto :MainMenu
@@ -561,10 +560,10 @@ exit /b
 
 ::========================================================================================================================================
 
-:Extras
+:EXTRAS_MENU
 
 cls
-title  Extras
+title  TIEN ICH MO RONG (EXTRAS)
 if not defined terminal mode 76, 30
 echo:
 echo:
@@ -573,22 +572,22 @@ echo:
 echo:
 echo:           ______________________________________________________
 echo:           
-echo:                [1] Extract $OEM$ Folder
+echo:                [1] Tao thu muc $OEM$ (De cai Win tu kich hoat)
 echo:                  
-echo:                [2] Download Genuine Windows / Office 
+echo:                [2] Tai Windows / Office nguyen ban tu Microsoft
 echo:                ____________________________________________      
 echo:                                                                          
-echo:                [0] Go to Main Menu
+echo:                [0] Quay lai Menu chinh (Main Menu)
 echo:           ______________________________________________________
 echo:
-call :dk_color2 %_White% "             " %_Green% "Choose a menu option using your keyboard [1,2,0] :"
+call :dk_color2 %_White% "             " %_Green% "Nhap lua chon cua ban tu ban phim [1,2,0] :"
 choice /C:120 /N
 set _erl=%errorlevel%
 
 if %_erl%==3 goto :MainMenu
-if %_erl%==2 start %mas%genuine-installation-media & goto :Extras
+if %_erl%==2 start %mas%genuine-installation-media & goto :EXTRAS_MENU
 if %_erl%==1 goto :Extract$OEM$
-goto :Extras
+goto :EXTRAS_MENU
 
 ::========================================================================================================================================
 

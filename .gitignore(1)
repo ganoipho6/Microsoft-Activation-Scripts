@@ -1,0 +1,9 @@
+.antigravity_metadata/
+*.log
+MAS_AIO_Original.cmd
+task*.md
+walkthrough*.md
+implementation_plan.md
+update_guide.md
+release_notes.md
+debug.log
