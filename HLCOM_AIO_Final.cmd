@@ -397,8 +397,8 @@ set pingp=
 set upver=%masver:.=%
 
 for %%A in (
-activ%-%ated.win
-mass%-%grave.dev
+@REM activ%-%ated.win
+@REM mass%-%grave.dev
 ) do if not defined pingp (
 for /f "delims=[] tokens=2" %%B in ('ping -n 1 %%A') do (
 if not "%%B"=="" (set old=1& set pingp=1)
@@ -500,35 +500,38 @@ echo:
 echo:
 echo:       ______________________________________________________________
 echo:
-echo:                 Activation Methods:
+echo:                 CAC PHUONG PHAP KICH HOAT BAN QUYEN:
 echo:
+echo [INFO] Displaying HWID option... >> "%_logfile%"
 if defined _hwidgo (
-call :dk_color3 %_White% "             [1] " %_Green% "HWID" %_White% "                - Windows"
+call :dk_color3 %_White% "             [1] " %_Green% "Windows Vinh Vien  " %_White% "- Kich hoat Windows HWID [Nen dung]"
 ) else (
-echo:             [1] HWID                - Windows
+echo:             [1] Windows Vinh Vien   - Kich hoat Windows HWID [Nen dung]
 )
+echo [INFO] Displaying Ohook option... >> "%_logfile%"
 if defined _ohookgo (
-call :dk_color3 %_White% "             [2] " %_Green% "Ohook" %_White% "               - Office"
+call :dk_color3 %_White% "             [2] " %_Green% "Office Vinh Vien   " %_White% "- Kich hoat Office Ohook [Nen dung]"
 ) else (
-echo:             [2] Ohook               - Office
+echo:             [2] Office Vinh Vien    - Kich hoat Office Ohook [Nen dung]
 )
 if defined _tsforgego (
-call :dk_color3 %_White% "             [3] " %_Green% "TSforge" %_White% "             - Windows / Office / ESU"
+call :dk_color3 %_White% "             [3] " %_Green% "Kich Hoat Nang Cao " %_White% "- Windows / Office / ESU"
 ) else (
-echo:             [3] TSforge             - Windows / Office / ESU
+echo:             [3] Kich Hoat Nang Cao  - Windows / Office / ESU
 )
-echo:             [4] Online KMS          - Windows / Office
+echo:             [4] Kich Hoat Qua KMS   - Windows / Office [Gia han tu dong]
 echo:             __________________________________________________ 
 echo:
-echo:             [5] Check Activation Status
-echo:             [6] Change Windows Edition
-echo:             [7] Change Office Edition
+echo:             [5] Kiem tra tinh trang Ban quyen hien tai
+echo:             [6] Thay doi phien ban Windows [Pro, Enterprise...]
+echo:             [7] Thay doi phien ban Office [Retail, Volume...]
 echo:             __________________________________________________      
 echo:
-echo:             [8] Troubleshoot
-echo:             [E] Extras
-echo:             [H] Help
-echo:             [0] Exit
+echo:             [8] Cong cu Sua loi va Khac phuc su co
+echo:             [E] Cac cong cu va Tien ich mo rong khac
+echo:             [H] Huong dan su dung va Tro giup
+echo:             [0] Thoat khoi ung dung
+
 echo:       ______________________________________________________________
 echo:
 call :dk_color2 %_White% "         " %_Green% "Choose a menu option using your keyboard [1,2,3...E,H,0] :"

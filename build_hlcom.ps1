@@ -19,15 +19,16 @@ $masContent = Invoke-WebRequest -Uri $masUrl -UseBasicParsing | Select-Object -E
 
 # 2. Sanitization (URLs & Syntax)
 Write-Host "[2/5] Applying sanitization..." -ForegroundColor Yellow
-# Comment out problematic URLs
-$masContent = $masContent -replace '(activated\.win)', '@REM $1'
-$masContent = $masContent -replace '(massgrave\.dev)', '@REM $1'
+# Comment out problematic URLs (handling obfuscation %-%)
+$masContent = $masContent -replace '(activ.*ated\.win)', '@REM $1'
+$masContent = $masContent -replace '(mass.*grave\.dev)', '@REM $1'
 # Fix unescaped parentheses in potential echo statements if they exist in original
 $masContent = $masContent -replace 'echo:(.*)\((.*)\)', 'echo:$1[$2]'
 
 # 3. Anti-Tamper & Integrity Removal
 Write-Host "[3/5] Removing integrity checks..." -ForegroundColor Yellow
 # Remove LF check / Line ending validation block if present
+# This regex targets the block that checks for special characters in path or line endings
 $masContent = $masContent -replace '(?s)::  Check if script is running from a path with special characters.*?::============================================================================', ':: Paths checked and sanitized by HLCOM'
 
 # 4. Injections (Password & Menu)
@@ -36,16 +37,22 @@ Write-Host "[4/5] Injecting HLCOM snippets..." -ForegroundColor Yellow
 # Password Injection
 if ($masContent -match ":skipQE") {
     $passSnippet = Get-Content $passSnippetFile -Raw
-    $masContent = $masContent -replace '(?s)(:skipQE.*?\n)(::  Check for updates)', "`$1`n$passSnippet`n`n`$2"
+    # We insert right after :skipQE and before the next major block
+    $masContent = $masContent -replace '(?s)(:skipQE.*?\r?\n)(::  Check for updates)', "`$1`n$passSnippet`n`n`$2"
 } else {
     Write-Error "Could not find label :skipQE in MAS script! Aborting."
 }
 
 # Menu Replacement
-# We look for the PHUONG PHAP KICH HOAT block or similar in original
-# In original it is: PHUONG PHAP KICH HOAT (ACTIVATION METHODS):
+# Detecting the official English menu block
 $menuSnippet = Get-Content $menuSnippetFile -Raw
-$masContent = $masContent -replace '(?s)echo:\s+PHUONG PHAP KICH HOAT \(ACTIVATION METHODS\):.*?echo:\s+\[0\] Thoat \(Exit\)', $menuSnippet
+$menuRegex = '(?s)echo:\s+Activation Methods:.*?echo:\s+\[0\] Exit'
+if ($masContent -match $menuRegex) {
+    $masContent = $masContent -replace $menuRegex, $menuSnippet
+} else {
+    Write-Warning "Could not find standard English menu block. Trying fallback PHUONG PHAP KICH HOAT..."
+    $masContent = $masContent -replace '(?s)echo:\s+PHUONG PHAP KICH HOAT.*?echo:\s+\[0\] Thoat', $menuSnippet
+}
 
 # 5. Save Final File
 Write-Host "[5/5] Saving final script (CRLF/ASCII)..." -ForegroundColor Yellow
