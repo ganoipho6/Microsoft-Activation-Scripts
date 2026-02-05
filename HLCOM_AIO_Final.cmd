@@ -108,7 +108,7 @@ popd
 
 cls
 color 07
-title  Microsoft_Activation_Scripts %masver%
+title  HLCOM - CONG CU KICH HOAT BAN QUYEN (Vinh Vien) %masver%
 
 set _args=
 set _elev=
@@ -465,7 +465,7 @@ goto dk_done
 
 cls
 color 07
-title  Microsoft %blank%Activation %blank%Scripts %masver%
+title  HLCOM - CONG CU KICH HOAT BAN QUYEN (Vinh Vien) %masver%
 if not defined terminal mode 76, 34
 
 if exist "%SystemRoot%\Servicing\Packages\Microsoft-Windows-Server*Edition~*.mum" set _serexist=1

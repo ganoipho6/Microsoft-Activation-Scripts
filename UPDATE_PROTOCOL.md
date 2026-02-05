@@ -33,3 +33,7 @@ Follow these steps when a new version of the upstream Microsoft-Activation-Scrip
 
 ## Step 5: Metadata Cleanup
 Ensure any temporary `pass_script` or `debug.log` files are NOT bundled with the final release if you want a clean distribution.
+
+## Step 6: Branding Final Touch
+- **CRITICAL:** Tìm và thay thế Window Title (`title`) trong file `.cmd` thành thương hiệu HLCOM:
+  `HLCOM - CONG CU KICH HOAT BAN QUYEN (Vinh Vien) %masver%`

